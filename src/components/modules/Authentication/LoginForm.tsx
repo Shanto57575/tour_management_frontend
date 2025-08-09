@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Link, useNavigate } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { useForm, type FieldValues, type SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -15,28 +15,81 @@ import {
 } from "@/components/ui/form";
 import { Password } from "@/components/ui/Password";
 import { useLoginMutation } from "@/redux/features/auth/auth.api";
+import z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { envConfig } from "@/config";
+
+const loginSchema = z.object({
+  email: z.email(),
+  password: z
+    .string()
+    .min(8, { error: "password must be at least 8 characters long" }),
+});
 
 export const LoginForm = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => {
   const navigate = useNavigate();
-  const form = useForm();
+  const form = useForm<z.infer<typeof loginSchema>>({
+    resolver: zodResolver(loginSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   const [login] = useLoginMutation();
 
-  const onSubmit: SubmitHandler<FieldValues> = async (data) => {
+  const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
       const result = await login(data).unwrap();
       console.log(result);
-      toast.success("User logged in successfully");
+
+      if (result?.success) {
+        toast.success("User logged in successfully");
+        navigate("/");
+      }
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.status === 401) {
-        toast.error("You are not verified");
-        navigate("/verify", { state: data.email });
+      const message = error?.data?.message;
+
+      switch (message) {
+        case "User does not exist!":
+          toast.error("User not found. Please sign up first.");
+          break;
+
+        case "User is not verified":
+          toast.error("You are not verified. Please verify your email.");
+          navigate("/verify", { state: data.email });
+          break;
+
+        case "User is BLOCKED":
+          toast.error("Your account has been blocked. Contact support.");
+          break;
+
+        case "User is INACTIVE":
+          toast.error("Your account is inactive. Contact support.");
+          break;
+
+        case "user is Deleted":
+          toast.error("This user has been deleted.");
+          break;
+
+        case "you have authenticated through google login! if you want to login through credentials at first login with google then set a password":
+          toast.error("Login using Google first and set a password.");
+          break;
+
+        case "Invalid credentials!":
+          toast.error("Invalid email or password.");
+          break;
+
+        default:
+          toast.error("Something went wrong. Please try again.");
+          break;
       }
-      console.error(error);
+
+      console.error("Login error:", error);
     }
   };
 
@@ -88,7 +141,7 @@ export const LoginForm = ({
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
+            <Button type="submit" className="w-full cursor-pointer">
               Sign In
             </Button>
           </form>
@@ -98,7 +151,11 @@ export const LoginForm = ({
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button
+          onClick={() => window.open(`${envConfig.baseURL}/auth/google`)}
+          variant="outline"
+          className="w-full cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             x="0px"

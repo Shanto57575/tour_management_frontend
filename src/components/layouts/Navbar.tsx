@@ -12,7 +12,14 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { ModeToggle } from "./ModeToggle";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
+import {
+  authApi,
+  useLogOutMutation,
+  useUserInfoQuery,
+} from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hook";
+import { toast } from "sonner";
 
 const navigationLinks = [
   { href: "/", label: "Home" },
@@ -20,6 +27,17 @@ const navigationLinks = [
 ];
 
 export const Navbar = () => {
+  const { data } = useUserInfoQuery(undefined);
+  const [logOut] = useLogOutMutation();
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const handleLogout = async () => {
+    await logOut(null);
+    dispatch(authApi.util.resetApiState());
+    navigate("/login");
+    toast.success("Uer Logged Out Successfully");
+  };
+
   return (
     <header className="border-b">
       <div className="container mx-auto px-4 flex h-16 items-center justify-between gap-4">
@@ -103,9 +121,20 @@ export const Navbar = () => {
         {/* Right side */}
         <div className="flex items-center gap-2">
           <ModeToggle />
-          <Button asChild size="default" className="text-sm">
-            <Link to="/login">Login</Link>
-          </Button>
+          {data?.data?.email ? (
+            <Button
+              onClick={handleLogout}
+              size="default"
+              variant={"outline"}
+              className="text-sm cursor-pointer"
+            >
+              Logout
+            </Button>
+          ) : (
+            <Button asChild size="default" className="text-sm cursor-pointer">
+              <Link to="/login">Login</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>
