@@ -31,6 +31,7 @@ export const Navbar = () => {
   const [logOut] = useLogOutMutation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
   const handleLogout = async () => {
     await logOut(null);
     dispatch(authApi.util.resetApiState());

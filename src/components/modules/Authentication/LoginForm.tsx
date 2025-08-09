@@ -18,6 +18,7 @@ import { useLoginMutation } from "@/redux/features/auth/auth.api";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { envConfig } from "@/config";
+import { LoaderCircleIcon } from "lucide-react";
 
 const loginSchema = z.object({
   email: z.email(),
@@ -31,6 +32,7 @@ export const LoginForm = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => {
   const navigate = useNavigate();
+
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
     defaultValues: {
@@ -39,7 +41,7 @@ export const LoginForm = ({
     },
   });
 
-  const [login] = useLoginMutation();
+  const [login, { isLoading: loginLoading }] = useLoginMutation();
 
   const onSubmit = async (data: z.infer<typeof loginSchema>) => {
     try {
@@ -142,7 +144,15 @@ export const LoginForm = ({
               )}
             />
             <Button type="submit" className="w-full cursor-pointer">
-              Sign In
+              {loginLoading ? (
+                <LoaderCircleIcon
+                  className="-ms-1 animate-spin"
+                  size={16}
+                  aria-hidden="true"
+                />
+              ) : (
+                "Sign In"
+              )}
             </Button>
           </form>
         </Form>
@@ -154,6 +164,7 @@ export const LoginForm = ({
         <Button
           onClick={() => window.open(`${envConfig.baseURL}/auth/google`)}
           variant="outline"
+          disabled={loginLoading}
           className="w-full cursor-pointer"
         >
           <svg

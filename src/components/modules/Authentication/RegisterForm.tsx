@@ -17,6 +17,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Password } from "@/components/ui/Password";
 import { useRegisterMutation } from "@/redux/features/auth/auth.api";
 import { toast } from "sonner";
+import { envConfig } from "@/config";
+import { LoaderCircleIcon } from "lucide-react";
 
 const registerSchema = z
   .object({
@@ -52,7 +54,7 @@ export const RegisterForm = ({
     },
   });
 
-  const [register] = useRegisterMutation();
+  const [register, { isLoading: registerLoading }] = useRegisterMutation();
 
   const onSubmit = async (data: z.infer<typeof registerSchema>) => {
     const userInfo = {
@@ -153,7 +155,15 @@ export const RegisterForm = ({
               )}
             />
             <Button type="submit" className="w-full">
-              Sign Up
+              {registerLoading ? (
+                <LoaderCircleIcon
+                  className="-ms-1 animate-spin"
+                  size={16}
+                  aria-hidden="true"
+                />
+              ) : (
+                "Sign Up"
+              )}
             </Button>
           </form>
         </Form>
@@ -162,7 +172,12 @@ export const RegisterForm = ({
             Or continue with
           </span>
         </div>
-        <Button variant="outline" className="w-full">
+        <Button
+          onClick={() => window.open(`${envConfig.baseURL}/auth/google`)}
+          variant="outline"
+          disabled={registerLoading}
+          className="w-full cursor-pointer"
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             x="0px"
