@@ -4,7 +4,6 @@ import { CommonLayout } from "./components/layouts/CommonLayout";
 export const App = () => {
   return (
     <CommonLayout>
-      My App Component
       <Outlet />
     </CommonLayout>
   );

@@ -15,7 +15,7 @@ export const Login = () => {
             <img src={Logo} className="w-20 h-20" alt="" />
           </Link>
         </div>
-        <div className="flex flex-1 items-center justify-center">
+        <div className="flex items-center justify-center">
           <div className="w-full max-w-xs md:max-w-sm lg:max-w-xs">
             <LoginForm />
           </div>
