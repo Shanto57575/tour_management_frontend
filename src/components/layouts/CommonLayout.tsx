@@ -8,7 +8,7 @@ interface IPros {
 
 export const CommonLayout = ({ children }: IPros) => {
   return (
-    <div className="container mx-auto min-h-screen flex flex-col">
+    <div className="container mx-auto min-h-screen flex flex-col font-ds">
       <Navbar />
       <div className="grow-1">{children}</div>
       <Footer />

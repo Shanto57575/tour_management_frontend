@@ -6,14 +6,34 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetTourTypesQuery } from "@/redux/features/tour/tour.api";
+import {
+  useGetTourTypesQuery,
+  useRemoveTourTypeMutation,
+} from "@/redux/features/tour/tour.api";
 import { EditIcon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddTourTypeModal from "@/components/modules/TourType/AddTourTypeModal";
 import FullPageLoader from "@/utils/FullPageLoader";
+import DeleteConfirmation from "@/components/DeleteConfirmation";
+import { toast } from "sonner";
 
 export const AddTourType = () => {
   const { data, isLoading } = useGetTourTypesQuery(undefined);
+  const [removeTourType] = useRemoveTourTypeMutation();
+
+  const handleRemoveTourType = async (tourTypeId: string) => {
+    const toastId = toast.loading("removing...");
+    try {
+      const res = await removeTourType(tourTypeId).unwrap();
+      if (res.success) {
+        console.log("");
+        toast.success("Tour Type Deleted", { id: toastId });
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error("Failed to delete tour type", { id: toastId });
+    }
+  };
 
   return (
     <div className="w-full max-w-7xl mx-auto">
@@ -41,8 +61,8 @@ export const AddTourType = () => {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {data.map((item: { name: string }, index: number) => (
-                <TableRow key={index}>
+              {data.map((item: { _id: string; name: string }) => (
+                <TableRow key={item._id}>
                   <TableCell className="font-medium w-full">
                     {item.name}
                   </TableCell>
@@ -52,9 +72,17 @@ export const AddTourType = () => {
                     </Button>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button size="sm" variant="outline">
-                      <Trash2Icon color="red" className="w-4 h-4" />
-                    </Button>
+                    <DeleteConfirmation
+                      onConfirm={() => handleRemoveTourType(item._id)}
+                    >
+                      <Button
+                        size="sm"
+                        variant={"outline"}
+                        className="cursor-pointer"
+                      >
+                        <Trash2Icon color="red" />
+                      </Button>
+                    </DeleteConfirmation>
                   </TableCell>
                 </TableRow>
               ))}

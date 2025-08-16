@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useAddTourTypeMutation } from "@/redux/features/tour/tour.api";
+import { LoaderCircleIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
@@ -31,11 +32,10 @@ const AddTourTypeModal = () => {
   const [open, setOpen] = useState(false);
   const form = useForm<TourTypeForm>();
 
-  const [addTourType] = useAddTourTypeMutation();
+  const [addTourType, { isLoading }] = useAddTourTypeMutation();
 
   const onSubmit: SubmitHandler<TourTypeForm> = async (data) => {
     try {
-      console.log(data);
       const res = await addTourType({ name: data.name }).unwrap();
       if (res.success) {
         toast.success("New Tour Type added");
@@ -88,8 +88,16 @@ const AddTourTypeModal = () => {
             <DialogClose asChild>
               <Button variant="outline">Cancel</Button>
             </DialogClose>
-            <Button form="add-tour-type" type="submit">
-              Save changes
+            <Button disabled={isLoading} form="add-tour-type" type="submit">
+              {isLoading ? (
+                <LoaderCircleIcon
+                  className="-ms-1 animate-spin"
+                  size={16}
+                  aria-hidden="true"
+                />
+              ) : (
+                "submit"
+              )}
             </Button>
           </DialogFooter>
         </DialogContent>

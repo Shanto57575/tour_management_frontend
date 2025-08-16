@@ -173,7 +173,9 @@ export const RegisterForm = ({
           </span>
         </div>
         <Button
-          onClick={() => window.open(`${envConfig.baseURL}/auth/google`)}
+          onClick={() => {
+            window.location.href = `${envConfig.baseURL}/auth/google`;
+          }}
           variant="outline"
           disabled={registerLoading}
           className="w-full cursor-pointer"

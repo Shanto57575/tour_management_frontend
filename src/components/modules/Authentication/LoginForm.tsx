@@ -162,7 +162,9 @@ export const LoginForm = ({
           </span>
         </div>
         <Button
-          onClick={() => window.open(`${envConfig.baseURL}/auth/google`)}
+          onClick={() => {
+            window.location.href = `${envConfig.baseURL}/auth/google`;
+          }}
           variant="outline"
           disabled={loginLoading}
           className="w-full cursor-pointer"
