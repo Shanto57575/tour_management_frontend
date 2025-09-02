@@ -10,12 +10,13 @@ import {
   useGetTourTypesQuery,
   useRemoveTourTypeMutation,
 } from "@/redux/features/tour/tour.api";
-import { EditIcon, Trash2Icon } from "lucide-react";
+import { Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import AddTourTypeModal from "@/components/modules/TourType/AddTourTypeModal";
 import FullPageLoader from "@/utils/FullPageLoader";
 import DeleteConfirmation from "@/components/DeleteConfirmation";
 import { toast } from "sonner";
+import EditTourTypeModal from "@/components/modules/TourType/EditTourTypeModal";
 
 export const AddTourType = () => {
   const { data, isLoading } = useGetTourTypesQuery(undefined);
@@ -67,9 +68,10 @@ export const AddTourType = () => {
                     {item.name}
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button size="sm" variant="outline">
-                      <EditIcon className="w-4 h-4" />
-                    </Button>
+                    <EditTourTypeModal
+                      tourTypeId={item._id}
+                      tourTypeName={item.name}
+                    />
                   </TableCell>
                   <TableCell className="text-right">
                     <DeleteConfirmation

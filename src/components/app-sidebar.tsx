@@ -6,7 +6,6 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
-  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -15,6 +14,7 @@ import {
 import { Link } from "react-router";
 import { getSidebarItem } from "@/utils/getSidebarItem";
 import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { AnimatedThemeToggler } from "./animated-theme-toggler";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: userData } = useUserInfoQuery(undefined);
@@ -25,11 +25,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 
   return (
     <Sidebar {...props}>
-      <SidebarHeader>
+      <div className="flex items-center justify-between mr-3">
         <Link to="/">
           <img className="w-20 h-20" src={Logo} alt={"logo"} />
         </Link>
-      </SidebarHeader>
+        <AnimatedThemeToggler />
+      </div>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
         {data.navMain.map((item) => (

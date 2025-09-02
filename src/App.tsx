@@ -1,10 +1,15 @@
 import { Outlet } from "react-router";
-import { CommonLayout } from "./components/layouts/CommonLayout";
+import Navbar from "./components/layouts/Navbar";
+import { Footer } from "./components/layouts/Footer";
 
 export const App = () => {
   return (
-    <CommonLayout>
-      <Outlet />
-    </CommonLayout>
+    <div className="container mx-auto min-h-screen flex flex-col font-ds">
+      <Navbar />
+      <div className="grow-1">
+        <Outlet />
+      </div>
+      <Footer />
+    </div>
   );
 };

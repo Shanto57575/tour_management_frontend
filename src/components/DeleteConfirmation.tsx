@@ -29,8 +29,8 @@ export default function DeleteConfirmation({ children, onConfirm }: IProps) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your
-            account and remove your data from our servers.
+            This action cannot be undone. This will permanently delete the tour
+            type
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

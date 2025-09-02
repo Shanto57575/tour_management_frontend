@@ -12,6 +12,8 @@ import { withAuth } from "@/utils/withAuth";
 import { role } from "@/constants/role";
 import type { TRole } from "@/types";
 import { UnAuthorized } from "@/pages/UnAuthorized";
+import { guideSidebarItems } from "./guideSidebarItems";
+import Home from "@/pages/Home/Home";
 
 export const router = createBrowserRouter([
   {
@@ -19,14 +21,27 @@ export const router = createBrowserRouter([
     Component: App,
     children: [
       {
+        index: true,
+        path: "/",
+        Component: Home,
+      },
+      {
         path: "about",
-        Component: withAuth(About),
+        Component: About,
       },
     ],
   },
+  // {
+  //   path: "/super_admin",
+  //   Component: withAuth(DashboardLayout, role.super_admin as TRole),
+  //   children: [
+  //     { index: true, element: <Navigate to="/admin/analytics" /> },
+  //     ...generateRoutes(adminSidebarItems),
+  //   ],
+  // },
   {
     path: "/admin",
-    Component: withAuth(DashboardLayout, role.super_admin as TRole),
+    Component: withAuth(DashboardLayout, role.admin as TRole),
     children: [
       { index: true, element: <Navigate to="/admin/analytics" /> },
       ...generateRoutes(adminSidebarItems),
@@ -38,6 +53,14 @@ export const router = createBrowserRouter([
     children: [
       { index: true, element: <Navigate to="/user/bookings" /> },
       ...generateRoutes(userSidebarItems),
+    ],
+  },
+  {
+    path: "/guide",
+    Component: withAuth(DashboardLayout, role.guide as TRole),
+    children: [
+      { index: true, element: <Navigate to="/guide/bookings" /> },
+      ...generateRoutes(guideSidebarItems),
     ],
   },
   {
