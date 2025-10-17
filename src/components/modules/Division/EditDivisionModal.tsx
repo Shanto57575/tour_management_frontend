@@ -21,44 +21,65 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useAddDivisionMutation } from "@/redux/features/division/division.api";
-import { LoaderCircleIcon } from "lucide-react";
+import { useUpdateDivisionMutation } from "@/redux/features/division/division.api";
+import { EditIcon, LoaderCircleIcon } from "lucide-react";
 import { useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 
-type TourTypeForm = {
+type DivisionForm = {
+  _id: string;
   name: string;
-  description: string;
+  description?: string;
+  thumbnail?: string;
 };
 
-const AddDivisionModal = () => {
+const EditDivisionModal = ({
+  divisionData,
+}: {
+  divisionData: DivisionForm;
+}) => {
   const [open, setOpen] = useState(false);
   const [image, setImage] = useState<File | null>(null);
-  const form = useForm<TourTypeForm>();
+  const form = useForm<DivisionForm>({
+    defaultValues: divisionData,
+  });
 
-  const [addDivision, { isLoading }] = useAddDivisionMutation();
+  const [updateDivision, { isLoading }] = useUpdateDivisionMutation();
 
-  const onSubmit: SubmitHandler<TourTypeForm> = async (data) => {
-    const toastId = toast.loading("adding division....");
+  const onSubmit: SubmitHandler<DivisionForm> = async (data) => {
+    const toastId = toast.loading("updating division....");
     try {
-      console.log(data);
       const formData = new FormData();
 
       formData.append("data", JSON.stringify(data));
-      formData.append("file", image as File);
-      const res = await addDivision(formData);
-
-      if (!(res.error as any)?.data?.success) {
-        toast.error("Failed to add division", { id: toastId });
+      if (image instanceof File) {
+        formData.append("file", image);
       }
-      if (res?.data?.success) {
-        toast.success(`${res?.data?.message}`, { id: toastId });
+      const res = await updateDivision({
+        divisionData: formData,
+        divisionId: divisionData._id,
+      });
+
+      console.log(res);
+
+      if (res && "error" in res && res.error) {
+        const err = res.error as any;
+        const errMessage =
+          err?.data?.errorSources?.[0]?.message ??
+          err?.data?.message ??
+          err?.message ??
+          "Failed to update division";
+        toast.error(errMessage, { id: toastId });
+      }
+
+      if (res && "data" in res && res.data?.success) {
+        toast.success(`${res.data.message}`, { id: toastId });
         setOpen(false);
         form.reset();
       }
     } catch (error: any) {
-      console.log(error);
+      console.log("error==>", error);
       console.log(error?.data?.errorSources[0]?.message);
       toast.error(`${error?.data?.errorSources[0]?.message}`, { id: toastId });
     }
@@ -67,14 +88,16 @@ const AddDivisionModal = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button onClick={() => setOpen(true)}>Add Division</Button>
+        <Button onClick={() => setOpen(true)}>
+          <EditIcon className="w-4 h-4" />
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Add Division</DialogTitle>
+          <DialogTitle>Update Division data</DialogTitle>
         </DialogHeader>
         <Form {...form}>
-          <form id="add-division" onSubmit={form.handleSubmit(onSubmit)}>
+          <form id="edit-division" onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="name"
@@ -84,10 +107,9 @@ const AddDivisionModal = () => {
                   <FormLabel className="mt-4 mb-2">Division Name</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="e.g. chattogram"
+                      placeholder="e.g. chittagong"
                       type="text"
                       {...field}
-                      value={field.value || ""}
                     />
                   </FormControl>
                   <FormDescription className="sr-only">
@@ -100,16 +122,11 @@ const AddDivisionModal = () => {
             <FormField
               control={form.control}
               name="description"
-              rules={{ required: "description is required" }}
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="mt-4 mb-2">Description</FormLabel>
                   <FormControl>
-                    <Textarea
-                      placeholder="description...."
-                      {...field}
-                      value={field.value || ""}
-                    />
+                    <Textarea placeholder="description...." {...field} />
                   </FormControl>
                   <FormDescription className="sr-only">
                     This is your public display name.
@@ -119,20 +136,21 @@ const AddDivisionModal = () => {
               )}
             />
           </form>
-          <SingleImageUploader setImage={setImage} />
+          <SingleImageUploader
+            setImage={setImage}
+            initialImage={divisionData.thumbnail || null}
+          />
         </Form>
         <DialogFooter>
           <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
+            <Button disabled={isLoading} variant="outline">
+              Cancel
+            </Button>
           </DialogClose>
-          <Button
-            disabled={!image || isLoading}
-            form="add-division"
-            type="submit"
-          >
+          <Button disabled={isLoading} form="edit-division" type="submit">
             {isLoading ? (
               <>
-                <span>submitting </span>
+                <span>please wait...</span>
                 <LoaderCircleIcon
                   className="-ms-1 animate-spin"
                   size={16}
@@ -149,4 +167,4 @@ const AddDivisionModal = () => {
   );
 };
 
-export default AddDivisionModal;
+export default EditDivisionModal;

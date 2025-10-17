@@ -1,13 +1,15 @@
 import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 import { useFileUpload } from "@/hooks/use-file-upload";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface SingleImageUploaderProps {
   setImage: React.Dispatch<React.SetStateAction<File | null>>;
+  initialImage?: string | null;
 }
 
 export default function SingleImageUploader({
   setImage,
+  initialImage,
 }: SingleImageUploaderProps) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024;
@@ -28,15 +30,32 @@ export default function SingleImageUploader({
     maxSize,
   });
 
-  const previewUrl = files[0]?.preview || null;
+  const [previewUrl, setPreviewUrl] = useState<string | null>(
+    initialImage || null
+  );
 
   useEffect(() => {
     if (files.length > 0 && files[0].file instanceof File) {
       setImage(files[0].file);
+      setPreviewUrl(files[0].preview as string);
     } else {
       setImage(null);
     }
-  }, [files]);
+  }, [files, setImage]);
+
+  useEffect(() => {
+    if (initialImage) {
+      setPreviewUrl(initialImage);
+    } else {
+      setPreviewUrl(null);
+    }
+  }, [initialImage]);
+
+  const handleRemove = () => {
+    removeFile(files[0]?.id);
+    setPreviewUrl(null);
+    setImage(null);
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -87,7 +106,7 @@ export default function SingleImageUploader({
             <button
               type="button"
               className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-[color,box-shadow] outline-none hover:bg-black/80 focus-visible:ring-[3px]"
-              onClick={() => removeFile(files[0]?.id)}
+              onClick={handleRemove}
               aria-label="Remove image"
             >
               <XIcon className="size-4" aria-hidden="true" />

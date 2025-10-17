@@ -5,8 +5,8 @@ import { Link } from "react-router";
 
 export const Login = () => {
   return (
-    <div className="grid min-h-svh lg:grid-cols-2">
-      <div className="flex flex-col gap-4 p-6 md:p-10">
+    <div className="grid min-h-svh lg:grid-cols-2 font-montserrat">
+      <div className="flex flex-col gap-4 p-6 md:p-10 mt-20">
         <div className="flex justify-center gap-2">
           <Link
             to="/"
@@ -16,7 +16,7 @@ export const Login = () => {
           </Link>
         </div>
         <div className="flex items-center justify-center">
-          <div className="w-full max-w-xs md:max-w-sm lg:max-w-xs">
+          <div className="w-full max-w-xs md:max-w-sm">
             <LoginForm />
           </div>
         </div>

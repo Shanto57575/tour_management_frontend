@@ -83,7 +83,7 @@ export const RegisterForm = ({
         </p>
       </div>
 
-      <div className="grid gap-6">
+      <div className="space-y-4 shadow shadow-white rounded-2xl px-8 py-10">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
             <FormField

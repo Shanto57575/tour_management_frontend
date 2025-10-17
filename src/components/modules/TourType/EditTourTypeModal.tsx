@@ -89,15 +89,20 @@ const EditTourTypeModal = ({ tourTypeId, tourTypeName }: EditTourType) => {
           </Form>
           <DialogFooter>
             <DialogClose asChild>
-              <Button variant="outline">Cancel</Button>
+              <Button disabled={isLoading} variant="outline">
+                Cancel
+              </Button>
             </DialogClose>
             <Button disabled={isLoading} form="add-tour-type" type="submit">
               {isLoading ? (
-                <LoaderCircleIcon
-                  className="-ms-1 animate-spin"
-                  size={16}
-                  aria-hidden="true"
-                />
+                <>
+                  <span>please wait...</span>
+                  <LoaderCircleIcon
+                    className="-ms-1 animate-spin"
+                    size={16}
+                    aria-hidden="true"
+                  />
+                </>
               ) : (
                 "submit"
               )}

@@ -90,11 +90,14 @@ const AddTourTypeModal = () => {
             </DialogClose>
             <Button disabled={isLoading} form="add-tour-type" type="submit">
               {isLoading ? (
-                <LoaderCircleIcon
-                  className="-ms-1 animate-spin"
-                  size={16}
-                  aria-hidden="true"
-                />
+                <>
+                  <span>please wait...</span>
+                  <LoaderCircleIcon
+                    className="-ms-1 animate-spin"
+                    size={16}
+                    aria-hidden="true"
+                  />
+                </>
               ) : (
                 "submit"
               )}

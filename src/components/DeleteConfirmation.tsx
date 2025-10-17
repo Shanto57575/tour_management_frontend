@@ -14,12 +14,16 @@ import type { ReactNode } from "react";
 interface IProps {
   children: ReactNode;
   onConfirm: () => void;
+  module: string;
 }
 
-export default function DeleteConfirmation({ children, onConfirm }: IProps) {
+export default function DeleteConfirmation({
+  children,
+  onConfirm,
+  module,
+}: IProps) {
   const handleConfirm = () => {
     onConfirm();
-    console.log("confirmed clicked");
   };
 
   return (
@@ -29,8 +33,8 @@ export default function DeleteConfirmation({ children, onConfirm }: IProps) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete the tour
-            type
+            This action cannot be undone. This will permanently delete the {""}
+            {module}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>

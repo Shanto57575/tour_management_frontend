@@ -18,7 +18,7 @@ import DeleteConfirmation from "@/components/DeleteConfirmation";
 import { toast } from "sonner";
 import EditTourTypeModal from "@/components/modules/TourType/EditTourTypeModal";
 
-export const AddTourType = () => {
+export const ManageTourType = () => {
   const { data, isLoading } = useGetTourTypesQuery(undefined);
   const [removeTourType] = useRemoveTourTypeMutation();
 
@@ -76,6 +76,7 @@ export const AddTourType = () => {
                   <TableCell className="text-right">
                     <DeleteConfirmation
                       onConfirm={() => handleRemoveTourType(item._id)}
+                      module="tour type"
                     >
                       <Button
                         size="sm"
