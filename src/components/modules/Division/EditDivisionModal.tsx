@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useUpdateDivisionMutation } from "@/redux/features/division/division.api";
 import { EditIcon, LoaderCircleIcon } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm, type SubmitHandler } from "react-hook-form";
 import { toast } from "sonner";
 
@@ -45,6 +45,10 @@ const EditDivisionModal = ({
     defaultValues: divisionData,
   });
 
+  useEffect(() => {
+    form.reset(divisionData);
+  }, [divisionData, form]);
+
   const [updateDivision, { isLoading }] = useUpdateDivisionMutation();
 
   const onSubmit: SubmitHandler<DivisionForm> = async (data) => {
@@ -61,8 +65,6 @@ const EditDivisionModal = ({
         divisionId: divisionData._id,
       });
 
-      console.log(res);
-
       if (res && "error" in res && res.error) {
         const err = res.error as any;
         const errMessage =
@@ -75,6 +77,7 @@ const EditDivisionModal = ({
 
       if (res && "data" in res && res.data?.success) {
         toast.success(`${res.data.message}`, { id: toastId });
+        setImage(null);
         setOpen(false);
         form.reset();
       }
@@ -92,7 +95,7 @@ const EditDivisionModal = ({
           <EditIcon className="w-4 h-4" />
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-[425px]">
+      <DialogContent className="sm:max-w-[425px] max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Update Division data</DialogTitle>
         </DialogHeader>
@@ -139,6 +142,7 @@ const EditDivisionModal = ({
           <SingleImageUploader
             setImage={setImage}
             initialImage={divisionData.thumbnail || null}
+            isLoading={isLoading}
           />
         </Form>
         <DialogFooter>

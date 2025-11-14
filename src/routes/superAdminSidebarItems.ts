@@ -6,18 +6,18 @@ import ManageDivision from "@/pages/admin/ManageDivision";
 import { ManageTour } from "@/pages/admin/ManageTour";
 import ProfilePage from "@/pages/ProfilePage";
 
-export const adminSidebarItems: ISidebarItem[] = [
+export const superAdminSidebarItems: ISidebarItem[] = [
   {
     title: "Dashboard",
     items: [
       {
         title: "Profile",
-        url: "/admin/profile",
+        url: "/super_admin/profile",
         component: ProfilePage,
       },
       {
         title: "Analytics",
-        url: "/admin/analytics",
+        url: "/super_admin/analytics",
         component: Analytics,
       },
     ],
@@ -27,22 +27,22 @@ export const adminSidebarItems: ISidebarItem[] = [
     items: [
       {
         title: "Manage Tour Type",
-        url: "/admin/add-tour-type",
+        url: "/super_admin/add-tour-type",
         component: ManageTourType,
       },
       {
         title: "Manage Division",
-        url: "/admin/add-division",
+        url: "/super_admin/add-division",
         component: ManageDivision,
       },
       {
         title: "Add Tour",
-        url: "/admin/add-tour",
+        url: "/super_admin/add-tour",
         component: AddTour,
       },
       {
         title: "Manage Tour",
-        url: "/admin/manage-tour",
+        url: "/super_admin/manage-tour",
         component: ManageTour,
       },
     ],

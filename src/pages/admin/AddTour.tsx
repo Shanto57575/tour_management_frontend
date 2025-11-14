@@ -74,9 +74,7 @@ export const AddTour = () => {
   const { data: divisionData, isLoading: divisionLoading } =
     useGetAllDivisionsQuery(undefined);
   const { data: tourTypeData } = useGetTourTypesQuery(undefined);
-  const [addTour] = useAddTourMutation();
-
-  console.log(divisionData, tourTypeData);
+  const [addTour, { isLoading }] = useAddTourMutation();
 
   const divisionOptions = divisionData?.division?.map(
     (item: { _id: string; name: string }) => ({
@@ -693,7 +691,7 @@ export const AddTour = () => {
           </Form>
         </CardContent>
         <CardFooter className="flex justify-end">
-          <Button type="submit" form="add-tour-form">
+          <Button disabled={isLoading} type="submit" form="add-tour-form">
             Create Tour
           </Button>
         </CardFooter>

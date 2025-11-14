@@ -5,11 +5,13 @@ import { useEffect, useState } from "react";
 interface SingleImageUploaderProps {
   setImage: React.Dispatch<React.SetStateAction<File | null>>;
   initialImage?: string | null;
+  isLoading?: boolean;
 }
 
 export default function SingleImageUploader({
   setImage,
   initialImage,
+  isLoading = false,
 }: SingleImageUploaderProps) {
   const maxSizeMB = 5;
   const maxSize = maxSizeMB * 1024 * 1024;
@@ -63,13 +65,15 @@ export default function SingleImageUploader({
         {/* Drop area */}
         <div
           role="button"
-          onClick={openFileDialog}
+          onClick={() => !isLoading && openFileDialog()}
           onDragEnter={handleDragEnter}
           onDragLeave={handleDragLeave}
           onDragOver={handleDragOver}
-          onDrop={handleDrop}
-          data-dragging={isDragging || undefined}
-          className="border-input hover:bg-accent/50 data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 relative flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors has-disabled:pointer-events-none has-disabled:opacity-50 has-[img]:border-none has-[input:focus]:ring-[3px]"
+          onDrop={(e) => !isLoading && handleDrop(e)}
+          data-dragging={isDragging && !isLoading ? true : undefined}
+          className={`border-input hover:bg-accent/50 data-[dragging=true]:bg-accent/50 has-[input:focus]:border-ring has-[input:focus]:ring-ring/50 relative flex min-h-52 flex-col items-center justify-center overflow-hidden rounded-xl border border-dashed p-4 transition-colors has-disabled:pointer-events-none has-disabled:opacity-50 has-[img]:border-none has-[input:focus]:ring-[3px] ${
+            isLoading ? "pointer-events-none opacity-60" : ""
+          }`}
         >
           <input
             {...getInputProps()}
@@ -82,7 +86,13 @@ export default function SingleImageUploader({
                 src={previewUrl}
                 alt={files[0]?.file?.name || "Uploaded image"}
                 className="size-full object-cover"
+                style={{ opacity: isLoading ? 0.5 : 1 }}
               />
+              {isLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-black/20">
+                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-white"></div>
+                </div>
+              )}
             </div>
           ) : (
             <div className="flex flex-col items-center justify-center px-4 py-3 text-center">

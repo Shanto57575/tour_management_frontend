@@ -14,6 +14,9 @@ import type { TRole } from "@/types";
 import { UnAuthorized } from "@/pages/UnAuthorized";
 import { guideSidebarItems } from "./guideSidebarItems";
 import Home from "@/pages/Home/Home";
+import TourDetails from "@/pages/TourDetails";
+import { superAdminSidebarItems } from "./superAdminSidebarItems";
+import AllPlaces from "@/pages/AllPlaces";
 
 export const router = createBrowserRouter([
   {
@@ -26,19 +29,27 @@ export const router = createBrowserRouter([
         Component: Home,
       },
       {
+        path: "all-places",
+        Component: AllPlaces,
+      },
+      {
         path: "about",
         Component: About,
       },
+      {
+        path: "/tour/:slug",
+        Component: TourDetails,
+      },
     ],
   },
-  // {
-  //   path: "/super_admin",
-  //   Component: withAuth(DashboardLayout, role.super_admin as TRole),
-  //   children: [
-  //     { index: true, element: <Navigate to="/admin/analytics" /> },
-  //     ...generateRoutes(adminSidebarItems),
-  //   ],
-  // },
+  {
+    path: "/super_admin",
+    Component: withAuth(DashboardLayout, role.super_admin as TRole),
+    children: [
+      { index: true, element: <Navigate to="/super_admin/analytics" /> },
+      ...generateRoutes(superAdminSidebarItems),
+    ],
+  },
   {
     path: "/admin",
     Component: withAuth(DashboardLayout, role.admin as TRole),

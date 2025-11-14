@@ -3,11 +3,8 @@ import logo from "../../assets/icons/trekOn.png";
 import { Link, useNavigate, NavLink } from "react-router";
 import { toast } from "sonner";
 import { AlignJustify, CircleUserRound, X } from "lucide-react";
-import {
-  authApi,
-  useLogOutMutation,
-  useUserInfoQuery,
-} from "@/redux/features/auth/auth.api";
+import { authApi, useLogOutMutation } from "@/redux/features/auth/auth.api";
+import { useUserInfoQuery } from "@/redux/features/user/user.api";
 import { useAppDispatch } from "@/redux/hook";
 import { Button } from "../ui/button";
 import { role } from "@/constants/role";
@@ -25,6 +22,8 @@ import {
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [logout] = useLogOutMutation();
+  const [avatarLoaded, setAvatarLoaded] = useState(false);
+  const [avatarError, setAvatarError] = useState(false);
 
   const { data: userData } = useUserInfoQuery(undefined);
 
@@ -32,6 +31,7 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home", role: "PUBLIC" },
+    { href: "/all-places", label: "All Places", role: "PUBLIC" },
     { href: "/about", label: "About", role: "PUBLIC" },
     { href: "/contact", label: "Contact", role: "PUBLIC" },
   ];
@@ -65,17 +65,15 @@ export default function Navbar() {
   };
 
   return (
-    <header className="font-montserrat bg-white/80 dark:bg-black/80 backdrop-blur-sm sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-700 shadow-sm">
+    <header className="font-serif bg-white/80 dark:bg-black/80 backdrop-blur-sm sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-700 shadow-sm">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          {/* Logo Section */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center gap-2 group">
               <img src={logo} className="w-20 h-20 drop-shadow-md" alt="logo" />
             </Link>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-x-4">
             {navLinks.map((link, index) => (
               <NavLink
@@ -83,7 +81,7 @@ export default function Navbar() {
                 to={link.href}
                 end={link.href === "/"}
                 className={({ isActive }) =>
-                  `relative text-sm font-medium transition-all duration-300 group transform ${
+                  `relative  font-medium transition-all duration-300 group transform ${
                     isActive
                       ? "text-purple-600 dark:text-purple-500"
                       : "text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
@@ -107,14 +105,31 @@ export default function Navbar() {
             </div>{" "}
             <DropdownMenu>
               <DropdownMenuTrigger className="cursor-pointer" asChild>
-                {userData?.data?.picture ? (
-                  <img
-                    className="w-10 h-10 rounded-full"
-                    src={userData?.data?.picture}
-                    alt=""
-                  />
+                {userData?.data?.picture && !avatarError ? (
+                  <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+                    {!avatarLoaded ? (
+                      <div
+                        className="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-700 animate-pulse"
+                        aria-hidden="true"
+                      />
+                    ) : null}
+                    <img
+                      className={`w-10 h-10 rounded-full object-cover absolute transition-opacity duration-300 ${
+                        avatarLoaded ? "opacity-100" : "opacity-0"
+                      }`}
+                      src={userData?.data?.picture}
+                      alt={userData?.data?.name || "User avatar"}
+                      onLoad={() => setAvatarLoaded(true)}
+                      onError={() => setAvatarError(true)}
+                    />
+                  </div>
                 ) : (
-                  <CircleUserRound />
+                  <div className="w-10 h-10 rounded-full bg-transparent flex items-center justify-center">
+                    <CircleUserRound
+                      className="w-8 h-8 text-gray-600 dark:text-gray-300"
+                      aria-hidden="true"
+                    />
+                  </div>
                 )}
               </DropdownMenuTrigger>
               <DropdownMenuContent
@@ -153,7 +168,6 @@ export default function Navbar() {
                 )}
               </DropdownMenuContent>
             </DropdownMenu>
-            {/* Mobile Menu Button */}
             <div className="md:hidden">
               <button
                 onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -183,7 +197,6 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile Menu Dropdown with enhanced animations */}
       <div
         className={`md:hidden absolute top-full left-0 right-0 z-40 border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-black/95 backdrop-blur-md transition-all duration-300 ease-out transform origin-top shadow-lg ${
           isMenuOpen
@@ -239,7 +252,7 @@ export default function Navbar() {
             ) : (
               <Link
                 to="/login"
-                className="w-full mt-2 text-center items-center justify-center rounded-xl text-sm font-medium h-12 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 block transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg border-2 border-transparent hover:border-gray-700 dark:hover:border-gray-300"
+                className="w-full mt-2 text-center items-center justify-center rounded-xl  font-medium h-12 px-4 py-2 bg-gray-900 dark:bg-white text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-gray-100 block transition-all duration-300 transform hover:scale-[1.02] hover:shadow-lg border-2 border-transparent hover:border-gray-700 dark:hover:border-gray-300"
                 onClick={() => setIsMenuOpen(false)}
               >
                 Login

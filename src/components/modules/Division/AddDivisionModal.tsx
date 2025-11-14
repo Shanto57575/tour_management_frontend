@@ -42,13 +42,12 @@ const AddDivisionModal = () => {
   const onSubmit: SubmitHandler<TourTypeForm> = async (data) => {
     const toastId = toast.loading("adding division....");
     try {
-      console.log(data);
       const formData = new FormData();
 
       formData.append("data", JSON.stringify(data));
       formData.append("file", image as File);
       const res = await addDivision(formData);
-
+      console.log(res);
       if (!(res.error as any)?.data?.success) {
         toast.error("Failed to add division", { id: toastId });
       }

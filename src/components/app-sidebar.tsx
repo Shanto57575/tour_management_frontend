@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/sidebar";
 import { Link } from "react-router";
 import { getSidebarItem } from "@/utils/getSidebarItem";
-import { useUserInfoQuery } from "@/redux/features/auth/auth.api";
+import { useUserInfoQuery } from "@/redux/features/user/user.api";
 import { AnimatedThemeToggler } from "./animated-theme-toggler";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {

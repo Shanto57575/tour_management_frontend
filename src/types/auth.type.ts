@@ -23,7 +23,7 @@ export interface Auth {
   providerId: string;
 }
 
-export interface User {
+export interface IUser {
   _id: string;
   name: string;
   email: string;
@@ -32,6 +32,10 @@ export interface User {
   isActive: string;
   role: string;
   auths: Auth[];
+  picture?: string;
+  image?: string | File;
+  address?: string;
+  phone?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -39,5 +43,19 @@ export interface User {
 export interface LoginData {
   accessToken: string;
   refreshToken: string;
-  user: User;
+  user: IUser;
+}
+
+export interface UpdateUserPayload {
+  userId: string;
+  userInfo: FormData;
+}
+
+export interface ISetPassword {
+  password: string;
+}
+
+export interface IChangePassword {
+  oldPassword: string;
+  newPassword: string;
 }

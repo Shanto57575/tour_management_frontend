@@ -2,21 +2,15 @@ import { baseApi } from "@/redux/baseApi";
 import type { IResponse } from "@/types";
 import type {
   ILogin,
-  IRegister,
   ISendOTP,
   IVerifyOTP,
   LoginData,
+  ISetPassword,
+  IChangePassword,
 } from "@/types/auth.type";
 
 export const authApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation<null, IRegister>({
-      query: (userInfo) => ({
-        url: "/user/register",
-        method: "POST",
-        data: userInfo,
-      }),
-    }),
     login: builder.mutation<IResponse<LoginData>, ILogin>({
       query: (userInfo) => ({
         url: "/auth/login",
@@ -40,26 +34,33 @@ export const authApi = baseApi.injectEndpoints({
     }),
     verifyOTP: builder.mutation<IResponse<null>, IVerifyOTP>({
       query: (userInfo) => ({
-        url: "otp/verify",
+        url: "/otp/verify",
         method: "POST",
         data: userInfo,
       }),
     }),
-    userInfo: builder.query({
-      query: () => ({
-        url: "/user/me",
-        method: "GET",
+    setPassword: builder.mutation<IResponse<null>, ISetPassword>({
+      query: (password) => ({
+        url: "/auth/set-password",
+        method: "POST",
+        data: password,
       }),
-      providesTags: ["USER"],
+    }),
+    changePassword: builder.mutation<IResponse<null>, IChangePassword>({
+      query: ({ oldPassword, newPassword }) => ({
+        url: "/auth/change-password",
+        method: "POST",
+        data: { oldPassword, newPassword },
+      }),
     }),
   }),
 });
 
 export const {
-  useRegisterMutation,
   useLoginMutation,
   useLogOutMutation,
   useSendOTPMutation,
   useVerifyOTPMutation,
-  useUserInfoQuery,
+  useSetPasswordMutation,
+  useChangePasswordMutation,
 } = authApi;
