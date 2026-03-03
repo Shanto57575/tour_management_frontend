@@ -2,9 +2,13 @@ import { useState } from "react";
 import {
   useGetAllToursQuery,
   useRemoveTourMutation,
+  useGetTourTypesQuery
 } from "@/redux/features/tour/tour.api";
+import { useGetAllDivisionsQuery } from "@/redux/features/division/division.api";
 import { Button } from "@/components/ui/button";
-import { Trash2Icon, EyeIcon, PencilIcon } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Trash2Icon, EyeIcon, PencilIcon, SearchIcon, MapPinIcon, BanknoteIcon } from "lucide-react";
 import FullPageLoader from "@/utils/FullPageLoader";
 import DeleteConfirmation from "@/components/DeleteConfirmation";
 import { toast } from "sonner";
@@ -15,8 +19,23 @@ import { EditTour } from "./EditTour";
 
 export const ManageTour = () => {
   const [page, setPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [tourType, setTourType] = useState("");
+  const [division, setDivision] = useState("");
 
-  const { data, isLoading } = useGetAllToursQuery({ page, limit: 9 });
+  const { data: tourTypesResponse } = useGetTourTypesQuery(undefined);
+  const { data: divisionsResponse } = useGetAllDivisionsQuery(undefined);
+
+  const tourTypes = tourTypesResponse?.data || tourTypesResponse || [];
+  const divisions = divisionsResponse?.data || divisionsResponse || [];
+
+  const { data, isLoading } = useGetAllToursQuery({
+    page,
+    limit: 9,
+    searchTerm: searchTerm || undefined,
+    tourType: tourType && tourType !== "all" ? tourType : undefined,
+    division: division && division !== "all" ? division : undefined
+  });
   const [removeTour] = useRemoveTourMutation();
 
   const handleRemoveTour = async (tourId: string) => {
@@ -45,8 +64,45 @@ export const ManageTour = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto p-6">
-      <div className="flex items-center justify-between mb-8">
+      <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold tracking-tight">Manage Tours</h1>
+      </div>
+
+      <div className="flex flex-col md:flex-row gap-4 mb-8">
+        <div className="relative flex-1">
+          <SearchIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500" size={18} />
+          <Input
+            placeholder="Search tours..."
+            className="pl-10"
+            value={searchTerm}
+            onChange={(e) => {
+              setSearchTerm(e.target.value);
+              setPage(1);
+            }}
+          />
+        </div>
+        <Select value={tourType} onValueChange={(val) => { setTourType(val); setPage(1); }}>
+          <SelectTrigger className="w-full md:w-[200px]">
+            <SelectValue placeholder="All Tour Types" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Tour Types</SelectItem>
+            {tourTypes?.map((type: any) => (
+              <SelectItem key={type._id} value={type._id}>{type.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
+        <Select value={division} onValueChange={(val) => { setDivision(val); setPage(1); }}>
+          <SelectTrigger className="w-full md:w-[200px]">
+            <SelectValue placeholder="All Divisions" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Divisions</SelectItem>
+            {divisions?.division?.map((div: any) => (
+              <SelectItem key={div._id} value={div._id}>{div.name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {tours.length === 0 ? (
@@ -72,12 +128,12 @@ export const ManageTour = () => {
                     {tour.title}
                   </h2>
 
-                  <p className="text-sm text-gray-600">
-                    📍 {tour.location} — {tour.departureLocation}
+                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                    <MapPinIcon size={16} className="text-gray-500" /> {tour.location} — {tour.departureLocation}
                   </p>
 
-                  <p className="text-sm text-gray-600">
-                    💰 <strong>{tour.costFrom}</strong> BDT
+                  <p className="text-sm text-gray-600 flex items-center gap-1">
+                    <BanknoteIcon size={16} className="text-gray-500" /> <strong>{tour.costFrom}</strong> BDT
                   </p>
 
                   <p className="text-sm text-gray-500 line-clamp-2">

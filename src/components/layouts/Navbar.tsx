@@ -66,7 +66,7 @@ export default function Navbar() {
 
   return (
     <header className="font-serif bg-white/80 dark:bg-black/80 backdrop-blur-sm sticky top-0 z-50 w-full border-b border-gray-200 dark:border-gray-700 shadow-sm">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center gap-2 group">
@@ -81,10 +81,9 @@ export default function Navbar() {
                 to={link.href}
                 end={link.href === "/"}
                 className={({ isActive }) =>
-                  `relative  font-medium transition-all duration-300 group transform ${
-                    isActive
-                      ? "text-purple-600 dark:text-purple-500"
-                      : "text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
+                  `relative  font-medium transition-all duration-300 group transform ${isActive
+                    ? "text-purple-600 dark:text-purple-500"
+                    : "text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white"
                   }`
                 }
                 style={{
@@ -114,9 +113,8 @@ export default function Navbar() {
                       />
                     ) : null}
                     <img
-                      className={`w-10 h-10 rounded-full object-cover absolute transition-opacity duration-300 ${
-                        avatarLoaded ? "opacity-100" : "opacity-0"
-                      }`}
+                      className={`w-10 h-10 rounded-full object-cover absolute transition-opacity duration-300 ${avatarLoaded ? "opacity-100" : "opacity-0"
+                        }`}
                       src={userData?.data?.picture}
                       alt={userData?.data?.name || "User avatar"}
                       onLoad={() => setAvatarLoaded(true)}
@@ -177,18 +175,16 @@ export default function Navbar() {
                 <span className="sr-only">Open main menu</span>
                 <div className="relative">
                   <X
-                    className={`h-6 w-6 absolute transition-all duration-300 transform ${
-                      isMenuOpen
+                    className={`h-6 w-6 absolute transition-all duration-300 transform ${isMenuOpen
                         ? "opacity-100 rotate-0"
                         : "opacity-0 rotate-90"
-                    }`}
+                      }`}
                   />
                   <AlignJustify
-                    className={`h-6 w-6 transition-all duration-300 transform ${
-                      isMenuOpen
+                    className={`h-6 w-6 transition-all duration-300 transform ${isMenuOpen
                         ? "opacity-0 -rotate-90"
                         : "opacity-100 rotate-0"
-                    }`}
+                      }`}
                   />
                 </div>
               </button>
@@ -198,11 +194,10 @@ export default function Navbar() {
       </div>
 
       <div
-        className={`md:hidden absolute top-full left-0 right-0 z-40 border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-black/95 backdrop-blur-md transition-all duration-300 ease-out transform origin-top shadow-lg ${
-          isMenuOpen
+        className={`md:hidden absolute top-full left-0 right-0 z-40 border-t border-gray-200 dark:border-gray-700 bg-white/95 dark:bg-black/95 backdrop-blur-md transition-all duration-300 ease-out transform origin-top shadow-lg ${isMenuOpen
             ? "opacity-100 scale-y-100 translate-y-0"
             : "opacity-0 scale-y-0 -translate-y-2 pointer-events-none"
-        }`}
+          }`}
         id="mobile-menu"
       >
         <div className="px-2 pt-2 pb-3 space-y-2 sm:px-3 bg-gradient-to-b from-transparent to-gray-50/50 dark:to-gray-900/50">
@@ -212,10 +207,9 @@ export default function Navbar() {
               to={link.href}
               end={link.href === "/"}
               className={({ isActive }) =>
-                `block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 transform hover:scale-[1.02] hover:translate-x-2 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 ${
-                  isActive
-                    ? "text-purple-500 dark:text-purple-500 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800 shadow-sm"
-                    : "text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white hover:shadow-md"
+                `block px-4 py-3 rounded-xl text-base font-medium transition-all duration-300 transform hover:scale-[1.02] hover:translate-x-2 border border-transparent hover:border-gray-200 dark:hover:border-gray-700 ${isActive
+                  ? "text-purple-500 dark:text-purple-500 bg-purple-50 dark:bg-purple-950/20 border-purple-200 dark:border-purple-800 shadow-sm"
+                  : "text-gray-600 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-800 hover:text-gray-900 dark:hover:text-white hover:shadow-md"
                 }`
               }
               style={{

@@ -1,6 +1,5 @@
 import { App } from "@/App";
 import Verify from "@/pages/Verify";
-import { About } from "@/pages/About";
 import { Login } from "@/pages/Login";
 import { Register } from "@/pages/Register";
 import { createBrowserRouter, Navigate } from "react-router";
@@ -17,6 +16,8 @@ import Home from "@/pages/Home/Home";
 import TourDetails from "@/pages/TourDetails";
 import { superAdminSidebarItems } from "./superAdminSidebarItems";
 import AllPlaces from "@/pages/AllPlaces";
+import About from "@/pages/About";
+import Contact from "@/pages/Contact";
 
 export const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ export const router = createBrowserRouter([
       {
         path: "about",
         Component: About,
+      },
+      {
+        path: "contact",
+        Component: Contact,
       },
       {
         path: "/tour/:slug",

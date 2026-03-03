@@ -9,7 +9,7 @@ export const App = () => {
     <div className="min-h-screen flex flex-col">
       <Navbar />
       <ScrollToTop />
-      <div className="grow-1">
+      <div className="container max-w-7xl mx-auto">
         <Outlet />
       </div>
       <ScrollToTopButton />

@@ -19,12 +19,22 @@ export const tourApi = baseApi.injectEndpoints({
       transformResponse: (response) => response.data,
     }),
     getAllTours: builder.query({
-      query: ({ page = 1, limit = 10 }) => ({
-        url: `/tour?page=${page}&limit=${limit}`,
-        method: "GET",
-      }),
+      query: (args: Record<string, any>) => {
+        const params = new URLSearchParams();
+        if (args) {
+          Object.keys(args).forEach((key) => {
+            if (args[key]) {
+              params.append(key, args[key] as string);
+            }
+          });
+        }
+        return {
+          url: `/tour?${params.toString()}`,
+          method: "GET",
+        };
+      },
       providesTags: ["TOUR"],
-      transformResponse: (response) => response.data,
+      transformResponse: (response: any) => response.data,
     }),
     editTour: builder.mutation({
       query: ({ tourId, tourInfo }) => ({
