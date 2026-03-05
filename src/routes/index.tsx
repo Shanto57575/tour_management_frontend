@@ -18,6 +18,7 @@ import { superAdminSidebarItems } from "./superAdminSidebarItems";
 import AllPlaces from "@/pages/AllPlaces";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
+import PaymentSuccess from "@/pages/PaymentSuccess";
 
 export const router = createBrowserRouter([
   {
@@ -44,6 +45,10 @@ export const router = createBrowserRouter([
       {
         path: "/tour/:slug",
         Component: TourDetails,
+      },
+      {
+        path: "/payment/success",
+        Component: PaymentSuccess,
       },
     ],
   },

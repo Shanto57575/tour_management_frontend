@@ -6,7 +6,7 @@ import ScrollToTopButton from "./utils/ScrollToTopButton";
 
 export const App = () => {
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col font-lato">
       <Navbar />
       <ScrollToTop />
       <div className="container max-w-7xl mx-auto">

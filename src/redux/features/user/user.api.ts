@@ -25,8 +25,29 @@ export const userApi = baseApi.injectEndpoints({
       }),
       providesTags: ["USER"],
     }),
+    getAllUsers: builder.query({
+      query: (query) => {
+        const params = new URLSearchParams();
+        if (query) {
+          Object.keys(query).forEach((key) => {
+            if (query[key]) {
+              params.append(key, query[key]);
+            }
+          });
+        }
+        return {
+          url: `/user/all-users?${params.toString()}`,
+          method: "GET",
+        };
+      },
+      providesTags: ["USER"],
+    }),
   }),
 });
 
-export const { useRegisterMutation, useUpdateUserMutation, useUserInfoQuery } =
-  userApi;
+export const {
+  useRegisterMutation,
+  useUpdateUserMutation,
+  useUserInfoQuery,
+  useGetAllUsersQuery,
+} = userApi;

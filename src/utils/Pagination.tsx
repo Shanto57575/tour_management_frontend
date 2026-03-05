@@ -14,6 +14,11 @@ export default function Pagination({
 }: PaginationProps) {
   if (totalPages <= 1) return null;
 
+  const handlePageChange = (page: number) => {
+    onPageChange(page);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
+
   const getVisiblePages = () => {
     const delta = 1;
     const range = [];
@@ -49,49 +54,50 @@ export default function Pagination({
   const pages = getVisiblePages();
 
   return (
-    <>
-      <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={currentPage === 1}
-          onClick={() => onPageChange(currentPage - 1)}
-        >
-          Prev
-        </Button>
+    <div className="flex justify-center items-center gap-2 mt-8 flex-wrap">
+      <Button
+        className="cursor-pointer"
+        size="sm"
+        variant="outline"
+        disabled={currentPage === 1}
+        onClick={() => handlePageChange(currentPage - 1)}
+      >
+        Prev
+      </Button>
 
-        {pages.map((page, index) =>
-          page === "..." ? (
-            <Button
-              key={`dots-${index}`}
-              size="sm"
-              variant="ghost"
-              disabled
-              className="px-2"
-            >
-              <MoreHorizontal className="h-4 w-4" />
-            </Button>
-          ) : (
-            <Button
-              key={page}
-              size="sm"
-              variant={page === currentPage ? "default" : "outline"}
-              onClick={() => onPageChange(page as number)}
-            >
-              {page}
-            </Button>
-          )
-        )}
+      {pages.map((page, index) =>
+        page === "..." ? (
+          <Button
+            key={`dots-${index}`}
+            size="sm"
+            variant="ghost"
+            disabled
+            className="px-2"
+          >
+            <MoreHorizontal className="h-4 w-4" />
+          </Button>
+        ) : (
+          <Button
+            className="cursor-pointer"
+            key={page}
+            size="sm"
+            variant={page === currentPage ? "default" : "outline"}
+            onClick={() => handlePageChange(page as number)}
+          >
+            {page}
+          </Button>
+        )
+      )}
 
-        <Button
-          size="sm"
-          variant="outline"
-          disabled={currentPage === totalPages}
-          onClick={() => onPageChange(currentPage + 1)}
-        >
-          Next
-        </Button>
-      </div>
-    </>
+      <Button
+        className="cursor-pointer"
+        size="sm"
+        variant="outline"
+        disabled={currentPage === totalPages}
+        onClick={() => handlePageChange(currentPage + 1)}
+      >
+        Next
+      </Button>
+    </div>
   );
 }

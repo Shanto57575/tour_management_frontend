@@ -22,8 +22,6 @@ export default function AllPlaces() {
   const tourTypes = tourTypesResponse?.data || tourTypesResponse || [];
   const divisions = divisionsResponse?.data || divisionsResponse || [];
 
-  console.log(tourTypes);
-  console.log(divisions);
   const { data, isLoading } = useGetAllToursQuery({
     page,
     limit: 8,
@@ -34,7 +32,7 @@ export default function AllPlaces() {
 
   if (isLoading)
     return (
-      <div className="flex justify-center py-20">
+      <div className="flex items-center justify-center py-20 min-h-screen">
         <FullPageLoader />
       </div>
     );
@@ -91,53 +89,57 @@ export default function AllPlaces() {
         </div>
       ) : (
         <>
-          <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {tours.map((tour: ITour) => (
               <div
                 key={tour._id}
-                className="group border rounded-2xl shadow-sm hover:shadow-md transition-all duration-200 overflow-hidden"
+                className="group flex flex-col rounded-xl overflow-hidden bg-white dark:bg-zinc-900 border border-zinc-200/80 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700 shadow-sm hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5"
               >
-                <img
-                  src={tour.images?.[0]}
-                  alt={tour.title}
-                  className="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-300"
-                />
+                {/* Image */}
+                <div className="relative h-44 overflow-hidden bg-zinc-100 dark:bg-zinc-800">
+                  <img
+                    src={tour.images?.[0]}
+                    alt={tour.title}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </div>
 
-                <div className="p-5 space-y-2">
-                  <h2 className="font-semibold text-lg truncate">
+                {/* Body */}
+                <div className="flex flex-col flex-1 p-4">
+                  <h2 className="font-semibold text-[15px] text-zinc-900 dark:text-zinc-50 truncate mb-3 leading-tight">
                     {tour.title}
                   </h2>
 
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
-                    <MapPinIcon size={16} className="text-gray-500" /> {tour.location} — {tour.departureLocation}
-                  </p>
+                  <div className="space-y-1.5 mb-3">
+                    <p className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+                      <MapPinIcon size={12} className="shrink-0" />
+                      <span className="truncate">{tour.location} — {tour.departureLocation}</span>
+                    </p>
+                    <p className="flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+                      <BanknoteIcon size={12} className="shrink-0" />
+                      <span className="font-semibold text-zinc-700 dark:text-zinc-300">{tour.costFrom}</span>
+                      <span>BDT</span>
+                    </p>
+                  </div>
 
-                  <p className="text-sm text-gray-600 flex items-center gap-1">
-                    <BanknoteIcon size={16} className="text-gray-500" /> <strong>{tour.costFrom}</strong> BDT
-                  </p>
-
-                  <p className="text-sm text-gray-500 line-clamp-2">
+                  <p className="text-xs text-zinc-400 dark:text-zinc-500 line-clamp-2 leading-relaxed mb-4 flex-1">
                     {tour.description}
                   </p>
 
-                  <div>
-                    <Link to={`/tour/${tour.slug}`}>
-                      <Button
-                        size="sm"
-                        className="cursor-pointer w-full flex items-center gap-1"
-                        variant="secondary"
-                      >
-                        <EyeIcon size={16} />
-                        View Details
-                      </Button>
-                    </Link>
-                  </div>
+                  <Link to={`/tour/${tour.slug}`}>
+                    <Button
+                      size="sm"
+                      className="w-full h-8 text-xs font-medium cursor-pointer flex items-center justify-center gap-1.5 rounded-lg bg-zinc-900 hover:bg-purple-600 dark:bg-zinc-100 dark:text-zinc-900 dark:hover:bg-purple-500 dark:hover:text-white text-white transition-colors duration-200"
+                    >
+                      <EyeIcon size={12} />
+                      View Details
+                    </Button>
+                  </Link>
                 </div>
               </div>
             ))}
-          </div>
-
-          <Pagination
+          </div>          <Pagination
             currentPage={meta.page}
             totalPages={meta.totalPage}
             onPageChange={(newPage) => setPage(newPage)}

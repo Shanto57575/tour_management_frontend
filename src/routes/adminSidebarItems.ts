@@ -5,6 +5,18 @@ import type { ISidebarItem } from "@/types";
 import ManageDivision from "@/pages/admin/ManageDivision";
 import { ManageTour } from "@/pages/admin/ManageTour";
 import ProfilePage from "@/pages/ProfilePage";
+import { ManageUsers } from "@/pages/admin/ManageUsers";
+import { ManageBookings } from "@/pages/admin/ManageBookings";
+import {
+  ChartNoAxesCombined,
+  MapPinHouse,
+  Pyramid,
+  SquareChartGantt,
+  TentTree,
+  TreePalm,
+  User,
+  Users,
+} from "lucide-react";
 
 export const adminSidebarItems: ISidebarItem[] = [
   {
@@ -13,12 +25,36 @@ export const adminSidebarItems: ISidebarItem[] = [
       {
         title: "Profile",
         url: "/admin/profile",
+        icon: User,
         component: ProfilePage,
       },
       {
         title: "Analytics",
         url: "/admin/analytics",
+        icon: ChartNoAxesCombined,
         component: Analytics,
+      },
+    ],
+  },
+  {
+    title: "User Management",
+    items: [
+      {
+        title: "Manage Users",
+        url: "/admin/manage-users",
+        icon: Users,
+        component: ManageUsers,
+      },
+    ],
+  },
+  {
+    title: "Booking Management",
+    items: [
+      {
+        title: "Manage Bookings",
+        url: "/admin/manage-bookings",
+        icon: SquareChartGantt,
+        component: ManageBookings,
       },
     ],
   },
@@ -28,21 +64,25 @@ export const adminSidebarItems: ISidebarItem[] = [
       {
         title: "Manage Tour Type",
         url: "/admin/add-tour-type",
+        icon: Pyramid,
         component: ManageTourType,
       },
       {
         title: "Manage Division",
         url: "/admin/add-division",
+        icon: MapPinHouse,
         component: ManageDivision,
       },
       {
         title: "Add Tour",
         url: "/admin/add-tour",
+        icon: TreePalm,
         component: AddTour,
       },
       {
         title: "Manage Tour",
         url: "/admin/manage-tour",
+        icon: TentTree,
         component: ManageTour,
       },
     ],
