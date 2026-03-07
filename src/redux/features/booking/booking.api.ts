@@ -40,9 +40,9 @@ export const bookingApi = baseApi.injectEndpoints({
       }),
       providesTags: ["BOOKING"],
     }),
-    initPayment: builder.mutation({
+    reInitPayment: builder.mutation({
       query: (bookingId) => ({
-        url: `/payment/init-payment/${bookingId}`,
+        url: `/booking/re-init-payment/${bookingId}`,
         method: "POST",
       }),
     }),
@@ -55,5 +55,5 @@ export const {
   useAllBookingsQuery,
   useMyBookingsQuery,
   useGetSingleBookingQuery,
-  useInitPaymentMutation,
+  useReInitPaymentMutation,
 } = bookingApi;

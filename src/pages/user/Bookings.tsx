@@ -1,12 +1,20 @@
-import { useMyBookingsQuery, useInitPaymentMutation } from "@/redux/features/booking/booking.api";
+import { useMyBookingsQuery, useReInitPaymentMutation } from "@/redux/features/booking/booking.api";
 import FullPageLoader from "@/utils/FullPageLoader";
 import { CalendarIcon, MapPin, Users, CreditCard, ChevronRight, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
 import { Link } from "react-router";
 import { toast } from "sonner";
+import { useState } from "react";
+import { CheckoutModal } from "@/components/modules/Payment/CheckoutModal";
 
 export const Bookings = () => {
   const { data: bookingsResponse, isLoading } = useMyBookingsQuery(undefined);
-  const [initPayment, { isLoading: isInitializingPayment }] = useInitPaymentMutation();
+  const [reInitPayment, { isLoading: isInitializingPayment }] = useReInitPaymentMutation();
+  const [checkoutData, setCheckoutData] = useState<{
+    clientSecret: string;
+    amount: number;
+    tourTitle: string;
+    tourImage: string | null;
+  } | null>(null);
 
   if (isLoading) {
     return (
@@ -68,13 +76,33 @@ export const Bookings = () => {
     return <span className="text-gray-500 font-bold text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-md capitalize">{status?.toLowerCase()}</span>;
   };
 
-  const handlePayNow = async (bookingId: string) => {
-    const toastId = toast.loading("Initializing payment gateway...");
+  const handlePayNow = async (booking: any) => {
+    const toastId = toast.loading("Preparing payment...");
     try {
-      const res = await initPayment(bookingId).unwrap();
-      if (res?.data?.paymentUrl) {
-        toast.success("Redirecting...", { id: toastId });
-        window.location.href = res.data.paymentUrl;
+      const res = await reInitPayment(booking._id).unwrap();
+      if (res?.data?.clientSecret) {
+        toast.dismiss(toastId);
+        // Save booking data for the success page
+        localStorage.setItem(
+          "pendingBooking",
+          JSON.stringify({
+            tourTitle: booking.tour?.title,
+            tourLocation: booking.tour?.location,
+            tourImage: booking.tour?.images?.[0] ?? null,
+            guestCount: booking.guestCount,
+            amount: booking.payment?.amount,
+            costPerPerson: booking.tour?.costFrom,
+            startDate: booking.tour?.startDate,
+            endDate: booking.tour?.endDate,
+            bookingId: booking._id,
+          })
+        );
+        setCheckoutData({
+          clientSecret: res.data.clientSecret,
+          amount: booking.payment?.amount,
+          tourTitle: booking.tour?.title,
+          tourImage: booking.tour?.images?.[0] ?? null,
+        });
       }
     } catch (error: any) {
       toast.error(error?.data?.message || "Failed to initialize payment", { id: toastId });
@@ -83,6 +111,16 @@ export const Bookings = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto p-4 md:p-6 lg:ml-20">
+
+      {/* Stripe Checkout Modal */}
+      {checkoutData && (
+        <CheckoutModal
+          clientSecret={checkoutData.clientSecret}
+          amount={checkoutData.amount}
+          tourTitle={checkoutData.tourTitle}
+          onClose={() => setCheckoutData(null)}
+        />
+      )}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-gray-200 dark:border-gray-800">
         <div>
           <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-2 font-lato">
@@ -187,7 +225,7 @@ export const Bookings = () => {
                     <div className="flex items-center gap-3">
                       {booking.status === "PENDING" && payment?.status === "UNPAID" && (
                         <button
-                          onClick={() => handlePayNow(booking._id)}
+                          onClick={() => handlePayNow(booking)}
                           disabled={isInitializingPayment}
                           className="text-sm font-semibold text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded-lg transition-colors disabled:opacity-50"
                         >

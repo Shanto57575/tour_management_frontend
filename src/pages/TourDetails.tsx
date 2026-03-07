@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useParams } from "react-router";
 import { useGetTourQuery } from "@/redux/features/tour/tour.api";
 import { useCreateBookingMutation } from "@/redux/features/booking/booking.api";
+import { CheckoutModal } from "@/components/modules/Payment/CheckoutModal";
 import {
   MapPin,
   Calendar,
@@ -27,6 +28,10 @@ export default function TourDetails() {
 
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [guestCount, setGuestCount] = useState<number>(1);
+  const [checkoutData, setCheckoutData] = useState<{
+    clientSecret: string;
+    amount: number;
+  } | null>(null);
 
   if (isLoading) return <TourLoader />;
   if (!TourData) return <TourNotFound />;
@@ -69,15 +74,32 @@ export default function TourDetails() {
         guestCount,
       };
       const res = await createBooking(payload).unwrap();
-      if (res?.data?.paymentUrl) {
-        toast.info("Redirecting to payment gateway...");
-        window.location.href = res.data.paymentUrl;
+      if (res?.data?.clientSecret) {
+        // Store booking info for the success page (Stripe redirect provides no booking data)
+        localStorage.setItem(
+          "pendingBooking",
+          JSON.stringify({
+            tourTitle: TourData.title,
+            tourLocation: TourData.location,
+            tourImage: TourData.images?.[0] ?? null,
+            guestCount,
+            amount: Number(TourData.costFrom || 0) * guestCount,
+            costPerPerson: Number(TourData.costFrom || 0),
+            startDate: TourData.startDate,
+            endDate: TourData.endDate,
+            bookingId: res.data.booking?._id,
+          })
+        );
+        setCheckoutData({
+          clientSecret: res.data.clientSecret,
+          amount: Number(TourData.costFrom || 0) * guestCount,
+        });
       } else {
         toast.success("Booking submitted successfully! We'll contact you soon.");
       }
     } catch (error: any) {
       toast.error(
-        error.data.message || "Failed to submit booking. Please try again."
+        error.data?.message || "Failed to submit booking. Please try again."
       );
     }
   };
@@ -91,6 +113,16 @@ export default function TourDetails() {
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-zinc-950 font-sans">
+
+      {/* ── STRIPE CHECKOUT MODAL ─────────────────────────────────────── */}
+      {checkoutData && (
+        <CheckoutModal
+          clientSecret={checkoutData.clientSecret}
+          amount={checkoutData.amount}
+          tourTitle={TourData.title}
+          onClose={() => setCheckoutData(null)}
+        />
+      )}
 
       {/* ── HERO ─────────────────────────────────────────────────────── */}
       <section className="relative h-[55vh] md:h-[75vh] overflow-hidden">

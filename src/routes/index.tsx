@@ -50,7 +50,7 @@ export const router = createBrowserRouter([
         Component: TourDetails,
       },
       {
-        path: "/payment/success",
+        path: "payment/success",
         Component: PaymentSuccess,
       },
       {
