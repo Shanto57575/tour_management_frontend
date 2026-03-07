@@ -85,7 +85,7 @@ export const Bookings = () => {
     <div className="w-full max-w-7xl mx-auto p-4 md:p-6 lg:ml-20">
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-gray-200 dark:border-gray-800">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-2 font-serif">
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-2 font-lato">
             My Bookings
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm">

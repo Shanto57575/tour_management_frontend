@@ -100,6 +100,16 @@ export default function Navbar() {
 
           {/* Right Side Actions */}
           <div className="flex items-center gap-2 sm:gap-3">
+            {/* Conditional 'Become a Guide' button */}
+            {(!isLoggedIn || userData?.data?.role === role.user) && (
+              <Link
+                to={isLoggedIn ? "/apply-guide" : "/login"}
+                className="hidden sm:flex items-center justify-center px-4 py-1.5 text-sm font-semibold rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/50 transition-colors"
+              >
+                Become a Guide
+              </Link>
+            )}
+
             {/* Theme Toggle */}
             <div className="flex items-center justify-center w-9 h-9 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors duration-200">
               <AnimatedThemeToggler />
@@ -228,8 +238,18 @@ export default function Navbar() {
             </NavLink>
           ))}
 
-          {/* Mobile Auth */}
-          <div className="pt-2 mt-1 border-t border-gray-200 dark:border-gray-800">
+          {/* Mobile Auth & Guide Actions */}
+          <div className="pt-2 mt-1 border-t border-gray-200 dark:border-gray-800 space-y-2">
+            {(!isLoggedIn || userData?.data?.role === role.user) && (
+              <Link
+                to={isLoggedIn ? "/apply-guide" : "/login"}
+                onClick={() => setIsMenuOpen(false)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-semibold text-purple-700 dark:text-purple-300 bg-purple-100 dark:bg-purple-900/30 hover:bg-purple-200 dark:hover:bg-purple-800/50 transition-all duration-200"
+              >
+                Become a Guide
+              </Link>
+            )}
+
             {isLoggedIn ? (
               <button
                 onClick={() => { handleLogout(); setIsMenuOpen(false); }}

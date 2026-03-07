@@ -7,6 +7,7 @@ import { ManageTour } from "@/pages/admin/ManageTour";
 import ProfilePage from "@/pages/ProfilePage";
 import { ManageUsers } from "@/pages/admin/ManageUsers";
 import { ManageBookings } from "@/pages/admin/ManageBookings";
+import { ManageGuides } from "@/pages/admin/ManageGuides";
 import {
   ChartNoAxesCombined,
   MapPinHouse,
@@ -16,6 +17,7 @@ import {
   TreePalm,
   User,
   Users,
+  ShieldCheck,
 } from "lucide-react";
 
 export const adminSidebarItems: ISidebarItem[] = [
@@ -44,6 +46,12 @@ export const adminSidebarItems: ISidebarItem[] = [
         url: "/admin/manage-users",
         icon: Users,
         component: ManageUsers,
+      },
+      {
+        title: "Manage Guides",
+        url: "/admin/manage-guides",
+        icon: ShieldCheck,
+        component: ManageGuides,
       },
     ],
   },

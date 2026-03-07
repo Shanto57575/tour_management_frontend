@@ -7,6 +7,8 @@ import type {
   LoginData,
   ISetPassword,
   IChangePassword,
+  IForgotPassword,
+  IResetPassword,
 } from "@/types/auth.type";
 
 export const authApi = baseApi.injectEndpoints({
@@ -53,6 +55,23 @@ export const authApi = baseApi.injectEndpoints({
         data: { oldPassword, newPassword },
       }),
     }),
+    forgotPassword: builder.mutation<IResponse<null>, IForgotPassword>({
+      query: (data) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        data,
+      }),
+    }),
+    resetPassword: builder.mutation<IResponse<null>, IResetPassword>({
+      query: ({ id, password, token }) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        data: { id, password },
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }),
+    }),
   }),
 });
 
@@ -63,4 +82,6 @@ export const {
   useVerifyOTPMutation,
   useSetPasswordMutation,
   useChangePasswordMutation,
+  useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = authApi;

@@ -3,7 +3,7 @@ import { Label } from "@/components/ui/label";
 import { Eye, EyeOff } from "lucide-react";
 import { useState } from "react";
 
-export const PasswordInput = ({ label, error, register, name, ...props }) => {
+export const PasswordInput = ({ label, error, register, name, rules, ...props }: any) => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -14,7 +14,7 @@ export const PasswordInput = ({ label, error, register, name, ...props }) => {
           id={name}
           type={showPassword ? "text" : "password"}
           className={error ? "border-red-500" : ""}
-          {...register(name)}
+          {...register(name, rules)}
           {...props}
         />
         <button

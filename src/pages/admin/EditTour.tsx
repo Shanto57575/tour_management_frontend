@@ -307,7 +307,7 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                     <FormItem>
                       <FormLabel>Tour Title</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input placeholder="Tour Title" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -322,7 +322,7 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                       <FormItem>
                         <FormLabel>Location</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input placeholder="Location" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -335,7 +335,7 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                       <FormItem>
                         <FormLabel>Cost (BDT)</FormLabel>
                         <FormControl>
-                          <Input type="number" {...field} />
+                          <Input placeholder="Cost (BDT)" type="number" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -351,7 +351,7 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                       <FormItem>
                         <FormLabel>Departure Location</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input placeholder="Departure Location" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -364,7 +364,7 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                       <FormItem>
                         <FormLabel>Arrival Location</FormLabel>
                         <FormControl>
-                          <Input {...field} />
+                          <Input placeholder="Arrival Location" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -384,7 +384,7 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                           defaultValue={field.value}
                           disabled={divisionLoading}
                         >
-                          <FormControl>
+                          <FormControl className="w-full">
                             <SelectTrigger>
                               <SelectValue placeholder="Select a division" />
                             </SelectTrigger>
@@ -413,7 +413,7 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                           onValueChange={field.onChange}
                           defaultValue={field.value}
                         >
-                          <FormControl>
+                          <FormControl className="w-full">
                             <SelectTrigger>
                               <SelectValue placeholder="Select a tour type" />
                             </SelectTrigger>
@@ -576,8 +576,6 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                 <div>
                   <div>
                     <FormLabel>Tour Images</FormLabel>
-
-                    {/* Show existing images if no new images uploaded */}
                     {images.length === 0 && previewImages.length > 0 && (
                       <div className="mb-4 p-4 border border-dashed rounded-xl">
                         <div className="flex items-center justify-between mb-3">
@@ -605,7 +603,6 @@ export const EditTour = ({ tour, children }: EditTourProps) => {
                       </div>
                     )}
 
-                    {/* Image uploader */}
                     <MultipleImageUploader setImages={setImages} />
                   </div>
                 </div>

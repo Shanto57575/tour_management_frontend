@@ -77,6 +77,7 @@ export const ChangePasswordModal = ({
             name="oldPassword"
             register={register}
             error={errors.oldPassword}
+            placeholder="Enter your current password"
             {...{
               validate: {
                 required: (v: string) => v || "Current password is required",
@@ -89,7 +90,8 @@ export const ChangePasswordModal = ({
             name="newPassword"
             register={register}
             error={errors.newPassword}
-            {...{ validate: passwordValidation }}
+            placeholder="Enter your new password"
+            rules={passwordValidation}
           />
 
           <PasswordInput
@@ -97,13 +99,10 @@ export const ChangePasswordModal = ({
             name="confirmPassword"
             register={register}
             error={errors.confirmPassword}
-            {...{
-              validate: {
-                required: (value: string) =>
-                  value || "Please confirm your password",
-                match: (value: string) =>
-                  value === newPassword || "Passwords do not match",
-              },
+            placeholder="Confirm your new password"
+            rules={{
+              required: "Please confirm your password",
+              validate: (value: string) => value === newPassword || "Passwords do not match"
             }}
           />
 
@@ -111,14 +110,14 @@ export const ChangePasswordModal = ({
             <Button
               variant="outline"
               onClick={onClose}
-              className="flex-1"
+              className="flex-1 cursor-pointer"
               disabled={isLoading}
             >
               Cancel
             </Button>
             <Button
               onClick={handleSubmit(handleFormSubmit)}
-              className="flex-1"
+              className="flex-1 cursor-pointer"
               disabled={isLoading}
             >
               {isLoading ? "Changing..." : "Change Password"}

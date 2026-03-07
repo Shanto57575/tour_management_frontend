@@ -13,19 +13,43 @@ import {
   SidebarHeader,
   useSidebar,
 } from "@/components/ui/sidebar";
-import { Link, useLocation } from "react-router";
+import { Link, useLocation, useNavigate } from "react-router";
 import { getSidebarItem } from "@/utils/getSidebarItem";
 import { useUserInfoQuery } from "@/redux/features/user/user.api";
 import { AnimatedThemeToggler } from "./animated-theme-toggler";
+import { Button } from "./ui/button";
+import { toast } from "sonner";
+import { authApi, useLogOutMutation } from "@/redux/features/auth/auth.api";
+import { useAppDispatch } from "@/redux/hook";
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   const { data: userData } = useUserInfoQuery(undefined);
   const location = useLocation();
+  const [logout] = useLogOutMutation();
+
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const { setOpenMobile, isMobile } = useSidebar();
 
   const data = {
     navMain: getSidebarItem(userData?.data?.role),
   };
+
+  const handleLogout = async () => {
+    const toastId = toast.loading("Logging out...");
+    try {
+      const result = await logout(undefined).unwrap();
+      if (result?.success) {
+        navigate("/login");
+        toast.success("Logged out successfully", { id: toastId });
+        dispatch(authApi.util.resetApiState());
+      }
+    } catch {
+      toast.error("Failed to logout", { id: toastId });
+    }
+  };
+
 
   return (
     <Sidebar {...props} className="border-r border-sidebar-border/50 shadow-sm bg-sidebar/95 backdrop-blur-md">
@@ -78,6 +102,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         ))}
       </SidebarContent>
+      <Button onClick={handleLogout} className="fixed bottom-0 w-full rounded-none hover:bg-purple-700 cursor-pointer">Logout</Button>
       <SidebarRail />
     </Sidebar>
   );

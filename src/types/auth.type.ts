@@ -59,3 +59,13 @@ export interface IChangePassword {
   oldPassword: string;
   newPassword: string;
 }
+
+export interface IForgotPassword {
+  email: string;
+}
+
+export interface IResetPassword {
+  id: string;
+  password: string;
+  token: string;
+}

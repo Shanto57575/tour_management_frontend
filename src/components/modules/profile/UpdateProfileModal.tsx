@@ -174,7 +174,7 @@ export const UpdateProfileModal = ({
               variant="outline"
               onClick={onClose}
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 cursor-pointer"
             >
               Cancel
             </Button>
@@ -182,7 +182,7 @@ export const UpdateProfileModal = ({
             <Button
               onClick={handleSubmit(handleFormSubmit)}
               disabled={isLoading}
-              className="flex-1"
+              className="flex-1 cursor-pointer"
             >
               {isLoading ? "Updating..." : "Update Profile"}
             </Button>

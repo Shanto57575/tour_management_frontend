@@ -75,7 +75,8 @@ export const SetPasswordModal = ({
             name="password"
             register={register}
             error={errors.password}
-            {...{ validate: passwordValidation }}
+            placeholder="Enter your password"
+            rules={passwordValidation}
           />
 
           <PasswordInput
@@ -83,13 +84,10 @@ export const SetPasswordModal = ({
             name="confirmPassword"
             register={register}
             error={errors.confirmPassword}
-            {...{
-              validate: {
-                required: (value: string) =>
-                  value || "Please confirm your password",
-                match: (value: string) =>
-                  value === password || "Passwords do not match",
-              },
+            placeholder="Confirm your password"
+            rules={{
+              required: "Please confirm your password",
+              validate: (value: string) => value === password || "Passwords do not match"
             }}
           />
 

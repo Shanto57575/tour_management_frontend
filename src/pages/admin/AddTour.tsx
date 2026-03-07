@@ -242,7 +242,7 @@ export const AddTour = () => {
                   <FormItem>
                     <FormLabel>Tour Title</FormLabel>
                     <FormControl>
-                      <Input {...field} />
+                      <Input placeholder="Tour Title" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -256,7 +256,7 @@ export const AddTour = () => {
                     <FormItem className="flex-1">
                       <FormLabel>Location</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input placeholder="Location" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -269,7 +269,7 @@ export const AddTour = () => {
                     <FormItem className="flex-1">
                       <FormLabel>Cost</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input placeholder="Cost" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -284,7 +284,7 @@ export const AddTour = () => {
                     <FormItem className="flex-1">
                       <FormLabel>Departure Location</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input placeholder="Departure Location" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -297,7 +297,7 @@ export const AddTour = () => {
                     <FormItem className="flex-1">
                       <FormLabel>Arrival Location</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input placeholder="Arrival Location" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -498,7 +498,7 @@ export const AddTour = () => {
                   <FormItem className="flex-1">
                     <FormLabel>Description</FormLabel>
                     <FormControl>
-                      <Textarea {...field} />
+                      <Textarea placeholder="Description" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

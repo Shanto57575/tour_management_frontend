@@ -6,14 +6,16 @@ import { Button } from "@/components/ui/button";
 import {
   useChangePasswordMutation,
   useSetPasswordMutation,
+  useLogOutMutation,
 } from "@/redux/features/auth/auth.api";
 import {
   useUpdateUserMutation,
   useUserInfoQuery,
 } from "@/redux/features/user/user.api";
-import type { Auth, IUser } from "@/types/auth.type";
+import type { Auth, IUser, ISetPassword, IChangePassword } from "@/types/auth.type";
 import { Edit, Lock, MapPin, Phone, User } from "lucide-react";
 import { useState } from "react";
+import { useNavigate } from "react-router";
 import { toast } from "sonner";
 
 export default function ProfilePage() {
@@ -23,6 +25,8 @@ export default function ProfilePage() {
     useSetPasswordMutation();
   const [changePassword, { isLoading: isChangingPassword }] =
     useChangePasswordMutation();
+  const [logOut] = useLogOutMutation();
+  const navigate = useNavigate();
 
   const [updateProfileOpen, setUpdateProfileOpen] = useState(false);
   const [passwordModalOpen, setPasswordModalOpen] = useState(false);
@@ -74,14 +78,39 @@ export default function ProfilePage() {
     }
   };
 
+  const handleSetPassword = async (data: ISetPassword) => {
+    try {
+      const res = await setPassword(data).unwrap();
+      if (res?.success) {
+        toast.success("Password set successfully!");
+        setPasswordModalOpen(false);
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to set password");
+    }
+  };
+
+  const handleChangePassword = async (data: IChangePassword) => {
+    try {
+      const res = await changePassword(data).unwrap();
+      if (res?.success) {
+        toast.success("Password changed successfully! Logging out...");
+        setPasswordModalOpen(false);
+        await logOut(undefined).unwrap();
+        navigate("/login");
+      }
+    } catch (error: any) {
+      toast.error(error?.data?.message || "Failed to change password");
+    }
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="w-full max-w-lg">
         <div className="rounded-3xl p-8 shadow-xl border border-white/40 dark:border-white/10">
-          {/* Header */}
           <div className="flex flex-col items-center mb-8">
             <Avatar className="h-28 w-28 ring-4 ring-purple-500/30 shadow-xl">
-              <AvatarImage src={userInfo?.picture} />
+              <AvatarImage src={userInfo?.picture} className="object-cover" />
               <AvatarFallback className="bg-gradient-to-br from-purple-500 to-purple-600 text-white text-2xl font-bold">
                 {initials}
               </AvatarFallback>
@@ -129,7 +158,7 @@ export default function ProfilePage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <Button
               onClick={() => setUpdateProfileOpen(true)}
-              className="w-full shadow-lg"
+              className="cursor-pointer w-full shadow-lg"
             >
               <Edit className="h-4 w-4 mr-2" />
               Update Profile
@@ -138,7 +167,7 @@ export default function ProfilePage() {
             <Button
               onClick={() => setPasswordModalOpen(true)}
               variant="outline"
-              className="w-full border-purple-300 hover:bg-purple-50 dark:border-purple-700"
+              className="cursor-pointer w-full border-purple-300 hover:bg-purple-50 dark:border-purple-700"
             >
               <Lock className="h-4 w-4 mr-2" />
               {hasCredentials ? "Change Password" : "Set Password"}
@@ -159,14 +188,14 @@ export default function ProfilePage() {
         <ChangePasswordModal
           open={passwordModalOpen}
           onClose={() => setPasswordModalOpen(false)}
-          onSubmit={changePassword}
+          onSubmit={handleChangePassword}
           isLoading={isChangingPassword}
         />
       ) : (
         <SetPasswordModal
           open={passwordModalOpen}
           onClose={() => setPasswordModalOpen(false)}
-          onSubmit={setPassword}
+          onSubmit={handleSetPassword}
           isLoading={isSettingPassword}
         />
       )}

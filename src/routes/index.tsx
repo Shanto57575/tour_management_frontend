@@ -2,6 +2,9 @@ import { App } from "@/App";
 import Verify from "@/pages/Verify";
 import { Login } from "@/pages/Login";
 import { Register } from "@/pages/Register";
+import ForgotPassword from "@/pages/auth/ForgotPassword";
+import ResetPassword from "@/pages/auth/ResetPassword";
+import ApplyGuide from "@/pages/ApplyGuide";
 import { createBrowserRouter, Navigate } from "react-router";
 import { DashboardLayout } from "@/components/layouts/DashboardLayout";
 import { generateRoutes } from "@/utils/generateRoutes";
@@ -50,6 +53,10 @@ export const router = createBrowserRouter([
         path: "/payment/success",
         Component: PaymentSuccess,
       },
+      {
+        path: "/apply-guide",
+        Component: withAuth(ApplyGuide, role.user as TRole),
+      },
     ],
   },
   {
@@ -69,19 +76,19 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: "/user",
-    Component: withAuth(DashboardLayout, role.user as TRole),
-    children: [
-      { index: true, element: <Navigate to="/user/bookings" /> },
-      ...generateRoutes(userSidebarItems),
-    ],
-  },
-  {
     path: "/guide",
     Component: withAuth(DashboardLayout, role.guide as TRole),
     children: [
       { index: true, element: <Navigate to="/guide/bookings" /> },
       ...generateRoutes(guideSidebarItems),
+    ],
+  },
+  {
+    path: "/user",
+    Component: withAuth(DashboardLayout, role.user as TRole),
+    children: [
+      { index: true, element: <Navigate to="/user/bookings" /> },
+      ...generateRoutes(userSidebarItems),
     ],
   },
   {
@@ -95,6 +102,14 @@ export const router = createBrowserRouter([
   {
     path: "/verify",
     Component: Verify,
+  },
+  {
+    path: "/forgot-password",
+    Component: ForgotPassword,
+  },
+  {
+    path: "/reset-password",
+    Component: ResetPassword,
   },
   {
     path: "/unauthorized",

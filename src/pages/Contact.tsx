@@ -4,7 +4,7 @@ import { Mail, Phone, MapPin, Send, CheckCheck } from "lucide-react";
 const topics = ["General Inquiry", "Sales & Pricing", "Technical Support", "Partnership", "Other"];
 
 export default function Contact() {
-    const [form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
+    const [_form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
     const [focused, setFocused] = useState<string | null>(null);
     const [sent, setSent] = useState(false);
     const [sending, setSending] = useState(false);
