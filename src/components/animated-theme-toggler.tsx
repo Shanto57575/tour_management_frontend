@@ -10,19 +10,16 @@ type props = {
 };
 
 export const AnimatedThemeToggler = ({ className }: props) => {
-  // Check localStorage or default to dark mode
   const getInitialTheme = () => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("theme");
-      if (stored === "dark") return true;
-      if (stored === "light") return false;
-      // Default to dark
-      return true;
+      if (stored === "dark") return false;
+      if (stored === "light") return true;
+      return false;
     }
-    return true;
+    return false;
   };
   const [isDarkMode, setIsDarkMode] = useState<boolean>(getInitialTheme);
-  // On mount, set html class and localStorage if not set
   useEffect(() => {
     if (typeof window !== "undefined") {
       if (isDarkMode) {
@@ -42,7 +39,6 @@ export const AnimatedThemeToggler = ({ className }: props) => {
       flushSync(() => {
         setIsDarkMode((prev) => {
           const newMode = !prev;
-          // html class and localStorage will be set by useEffect
           return newMode;
         });
       });

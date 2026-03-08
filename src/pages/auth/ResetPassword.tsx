@@ -67,7 +67,7 @@ export default function ResetPassword() {
             <div className="flex min-h-svh flex-col items-center justify-center p-6 bg-slate-50 dark:bg-zinc-950">
                 <div className="max-w-md w-full text-center space-y-4 bg-white dark:bg-zinc-900 p-8 rounded-2xl shadow">
                     <AlertTriangleIcon className="w-12 h-12 text-rose-500 mx-auto" />
-                    <h2 className="text-xl font-bold font-lato">Invalid Reset Link</h2>
+                    <h2 className="text-xl font-bold font-merriweather">Invalid Reset Link</h2>
                     <p className="text-slate-500 dark:text-zinc-400 text-sm">
                         This password reset link is missing required parameters or is invalid. Please request a new link.
                     </p>
@@ -86,7 +86,7 @@ export default function ResetPassword() {
             <div className="w-full max-w-md relative z-10">
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center gap-2 text-center">
-                        <h1 className="text-2xl font-bold font-lato text-slate-900 dark:text-white">
+                        <h1 className="text-2xl font-bold font-merriweather text-slate-900 dark:text-white">
                             Set New Password
                         </h1>
                         <p className="text-muted-foreground text-sm text-balance">

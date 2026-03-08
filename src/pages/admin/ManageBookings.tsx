@@ -68,7 +68,7 @@ export const ManageBookings = () => {
     return (
         <div className="w-full max-w-7xl mx-auto p-4 md:p-6">
             <div className="flex items-center justify-between mb-6">
-                <h1 className="text-2xl font-semibold tracking-tight font-lato text-gray-900 dark:text-white">
+                <h1 className="text-2xl font-semibold tracking-tight font-merriweather text-gray-900 dark:text-white">
                     Manage Bookings
                 </h1>
             </div>

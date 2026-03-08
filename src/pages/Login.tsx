@@ -5,7 +5,7 @@ import { Link } from "react-router";
 
 export const Login = () => {
   return (
-    <div className="grid min-h-svh lg:grid-cols-2 font-lato">
+    <div className="grid min-h-svh lg:grid-cols-2 font-merriweather">
       <div className="flex flex-col gap-4 p-6 md:p-10 mt-20">
         <div className="flex justify-center gap-2">
           <Link

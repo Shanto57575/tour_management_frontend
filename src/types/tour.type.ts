@@ -7,9 +7,11 @@ export interface ITour {
   amenities: string[];
   arrivalLocation: string;
   costFrom: number;
+  discount?: number;
   createdAt: string;
   departureLocation: string;
-  division: string;
+  division: string | any;
+  destination: string | any;
   endDate: string;
   excluded: string[];
   included: string[];
@@ -18,7 +20,12 @@ export interface ITour {
   slug: string;
   startDate: string;
   tourPlan: string[];
-  tourType: string;
+  tourType: string | any;
+  isFeatured?: boolean;
+  isTrending?: boolean;
+  averageRating?: number;
+  totalReviews?: number;
+  status?: "active" | "inactive";
   updatedAt: string;
   __v: number;
 }

@@ -109,7 +109,7 @@ export default function ApplyGuide() {
                         <div className="mx-auto bg-amber-100 dark:bg-amber-900/50 w-16 h-16 rounded-full flex flex-col items-center justify-center mb-2">
                             <MapPin className="text-amber-600 dark:text-amber-400 w-8 h-8" />
                         </div>
-                        <CardTitle className="text-2xl font-bold font-lato text-slate-900 dark:text-white">
+                        <CardTitle className="text-2xl font-bold font-merriweather text-slate-900 dark:text-white">
                             Application {activeApplication.status === "PENDING" ? "Under Review" : activeApplication.status}
                         </CardTitle>
                         <CardDescription className="text-base">
@@ -165,7 +165,7 @@ export default function ApplyGuide() {
                         <div className="mx-auto bg-purple-100 dark:bg-purple-900/50 w-16 h-16 rounded-full flex flex-col items-center justify-center mb-2">
                             <MapPin className="text-purple-600 dark:text-purple-400 w-8 h-8" />
                         </div>
-                        <CardTitle className="text-2xl font-bold font-lato text-slate-900 dark:text-white">
+                        <CardTitle className="text-2xl font-bold font-merriweather text-slate-900 dark:text-white">
                             Apply to be a Guide
                         </CardTitle>
                         <CardDescription className="text-base">

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Mail, Phone, MapPin, Send, CheckCheck } from "lucide-react";
+import { Container } from "@/components/shared/Container";
 
 const topics = ["General Inquiry", "Sales & Pricing", "Technical Support", "Partnership", "Other"];
 
@@ -28,7 +29,7 @@ export default function Contact() {
             : "border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700");
 
     return (
-        <div className="min-h-screen bg-white dark:bg-zinc-950 flex flex-col items-center justify-center px-4">
+        <Container className="bg-white dark:bg-zinc-950 min-h-screen" innerClassName="flex flex-col items-center justify-center pt-24 pb-12">
 
             {/* Header */}
             <div className="text-center mb-12 max-w-lg">
@@ -187,6 +188,6 @@ export default function Contact() {
                 ))}
             </div>
 
-        </div>
+        </Container>
     );
 }

@@ -25,7 +25,6 @@ export default function TourDetails() {
   const { data: TourData, isLoading } = useGetTourQuery(slug);
   const [createBooking, { isLoading: isBooking }] = useCreateBookingMutation();
   const { data: user } = useUserInfoQuery(undefined);
-
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [guestCount, setGuestCount] = useState<number>(1);
   const [checkoutData, setCheckoutData] = useState<{
@@ -37,8 +36,8 @@ export default function TourDetails() {
   if (!TourData) return <TourNotFound />;
 
   const imgs =
-    TourData.images && TourData.images.length
-      ? TourData.images
+    TourData?.images && TourData?.images?.length
+      ? TourData?.images
       : ["/placeholder.jpg"];
 
   const formatDate = (s?: string) =>
@@ -51,10 +50,10 @@ export default function TourDetails() {
       : "-";
 
   const durationDays =
-    TourData.startDate && TourData.endDate
+    TourData?.startDate && TourData?.endDate
       ? Math.ceil(
-        (new Date(TourData.endDate).getTime() -
-          new Date(TourData.startDate).getTime()) /
+        (new Date(TourData?.endDate).getTime() -
+          new Date(TourData?.startDate).getTime()) /
         (1000 * 60 * 60 * 24)
       )
       : "-";
@@ -98,6 +97,10 @@ export default function TourDetails() {
         toast.success("Booking submitted successfully! We'll contact you soon.");
       }
     } catch (error: any) {
+      console.log("error", error)
+      if (error.status === 401) {
+        return toast.error("Session Over! Please Login First");
+      }
       toast.error(
         error.data?.message || "Failed to submit booking. Please try again."
       );

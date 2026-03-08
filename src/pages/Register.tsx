@@ -5,7 +5,7 @@ import Logo from "@/assets/icons/trekOn.png";
 
 export const Register = () => {
   return (
-    <div className="grid min-h-svh lg:grid-cols-2 font-lato">
+    <div className="grid min-h-svh lg:grid-cols-2 font-merriweather">
       <div className="relative hidden bg-muted lg:block">
         <img
           src={registerImage}
