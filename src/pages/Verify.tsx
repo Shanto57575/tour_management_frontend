@@ -53,7 +53,7 @@ const Verify = () => {
 
   const [email] = useState(location.state);
   const [confirmed, setConfirmed] = useState(false);
-  const [timer, setTimer] = useState(5);
+  const [timer, setTimer] = useState(120);
   const [isSending, setIsSending] = useState(false);
   const [sendOTP] = useSendOTPMutation();
   const [verifyOTP] = useVerifyOTPMutation();
@@ -70,7 +70,6 @@ const Verify = () => {
     }
     const timerId = setInterval(() => {
       setTimer((prev) => (prev > 0 ? prev - 1 : 0));
-      console.log("timerId");
     }, 1000);
 
     return () => clearInterval(timerId);
@@ -79,19 +78,27 @@ const Verify = () => {
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
     setIsSending(true);
     const toastId = toast.loading("Verifying OTP");
-    const userInfo = {
-      email,
-      otp: data.pin,
-    };
+    const userInfo = { email, otp: data.pin };
+
     try {
-      setConfirmed(true);
       const result = await verifyOTP(userInfo).unwrap();
       if (result.success) {
-        toast.success(`OTP Verified Successfully`, { id: toastId });
+        toast.success("OTP Verified Successfully! You can login now", { id: toastId });
+        navigate("/login");
       }
     } catch (error: any) {
-      toast.error(error.data.message);
-      console.error(error);
+      console.log("raw error →", error); // check the real shape first
+
+      // RTK Query wraps it in error.data
+      const message = error?.data?.message
+        ?? error?.message
+        ?? "Something went wrong";
+
+      toast.error(message, { id: toastId });
+
+      if (message.toLowerCase().includes("already verified")) {
+        setTimeout(() => navigate("/login"), 1500);
+      }
     } finally {
       setIsSending(false);
     }
@@ -105,7 +112,7 @@ const Verify = () => {
       if (result.success) {
         toast.success(`OTP SENT TO ${email}`, { id: toastId });
         setConfirmed(true);
-        setTimer(5);
+        setTimer(120);
       }
     } catch (error: any) {
       toast.error(error.data.message);

@@ -1,5 +1,3 @@
-"use client";
-
 import { Moon, SunDim } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { flushSync } from "react-dom";
@@ -13,9 +11,8 @@ export const AnimatedThemeToggler = ({ className }: props) => {
   const getInitialTheme = () => {
     if (typeof window !== "undefined") {
       const stored = localStorage.getItem("theme");
-      if (stored === "dark") return false;
-      if (stored === "light") return true;
-      return false;
+      if (stored === "dark") return true;
+      if (stored === "light") return false;
     }
     return false;
   };

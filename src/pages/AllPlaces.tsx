@@ -9,6 +9,7 @@ import Pagination from "@/utils/Pagination";
 import { EyeIcon, SearchIcon, MapPinIcon, BanknoteIcon } from "lucide-react";
 import { useState } from "react";
 import { Link } from "react-router";
+import { Container } from "@/components/shared/Container";
 
 export default function AllPlaces() {
   const [page, setPage] = useState(1);
@@ -41,7 +42,7 @@ export default function AllPlaces() {
   const meta = data?.meta || { page: 1, totalPage: 1 };
 
   return (
-    <div className="w-full p-6">
+    <Container className="w-full p-6">
       <div className="flex items-center justify-between mb-6">
         <h1 className="text-2xl font-semibold tracking-tight">Manage Tours</h1>
       </div>
@@ -146,6 +147,6 @@ export default function AllPlaces() {
           />
         </>
       )}
-    </div>
+    </Container>
   );
 }

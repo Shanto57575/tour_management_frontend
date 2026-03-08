@@ -64,12 +64,14 @@ export const RegisterForm = ({
     };
 
     try {
-      const result = await register(userInfo);
+      const result = await register(userInfo).unwrap()
       console.log(result);
-      toast.success("User created successfully");
-      navigate("/verify");
+      if (result.success) {
+        toast.success(result.message);
+        navigate("/verify", { state: result.data.email });
+      }
     } catch (error) {
-      toast.error("Failed to create user");
+      toast.error((error as any).data?.message || "Something went wrong!");
       console.error(error);
     }
   };

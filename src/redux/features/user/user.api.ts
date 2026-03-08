@@ -1,9 +1,14 @@
 import { baseApi } from "@/redux/baseApi";
-import type { IRegister, IUser, UpdateUserPayload } from "@/types/auth.type";
+import type {
+  IRegister,
+  IRegisterResponse,
+  IUser,
+  UpdateUserPayload,
+} from "@/types/auth.type";
 
 export const userApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
-    register: builder.mutation<null, IRegister>({
+    register: builder.mutation<IRegisterResponse, IRegister>({
       query: (userInfo) => ({
         url: "/user/register",
         method: "POST",

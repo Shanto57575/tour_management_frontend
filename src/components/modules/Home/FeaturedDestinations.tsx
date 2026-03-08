@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MapPin, Clock, Star, ArrowRight, TrendingUp } from "lucide-react";
 import { Container } from "@/components/shared/Container";
+import { Link } from "react-router";
 
 const destinations = [
     {
@@ -356,8 +357,8 @@ export default function FeaturedDestinations() {
                 </div>
 
                 <div className="text-center mt-12">
-                    <a
-                        href="/all-places"
+                    <Link
+                        to="/all-places"
                         className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-purple-200 dark:border-purple-800/60 bg-white dark:bg-zinc-900/60 text-sm font-semibold text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-950/60 hover:border-purple-400 dark:hover:border-purple-500 transition-all duration-200 group"
                     >
                         View All Destinations
@@ -365,7 +366,7 @@ export default function FeaturedDestinations() {
                             size={15}
                             className="group-hover:translate-x-1 transition-transform duration-200"
                         />
-                    </a>
+                    </Link>
                 </div>
             </div>
         </Container>

@@ -4,6 +4,24 @@ export interface IRegister {
   password: string;
 }
 
+export interface IRegisterResponse {
+  success: boolean;
+  statusCode: number;
+  message: string;
+  data: {
+    _id: string;
+    name: string;
+    email: string;
+    role: string;
+    isActive: string;
+    isVerified: boolean;
+    isDeleted: boolean;
+    createdAt: string;
+    updatedAt: string;
+    auths: any[];
+  };
+}
+
 export interface ILogin {
   email: string;
   password: string;

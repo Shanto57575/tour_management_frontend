@@ -78,7 +78,7 @@ export const LoginForm = ({
           break;
 
         case "you have authenticated through google login! if you want to login through credentials at first login with google then set a password":
-          toast.error("Login using Google first and set a password.");
+          toast.error("This Acount is authenticated through google login, so if you want to login through credentials, at first login with google then set a password");
           break;
 
         case "Invalid credentials!":
