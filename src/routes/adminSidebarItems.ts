@@ -8,9 +8,11 @@ import ProfilePage from "@/pages/ProfilePage";
 import { ManageUsers } from "@/pages/admin/ManageUsers";
 import { ManageBookings } from "@/pages/admin/ManageBookings";
 import { ManageGuides } from "@/pages/admin/ManageGuides";
+import ManageDestination from "@/pages/admin/ManageDestination";
 import {
   ChartNoAxesCombined,
   MapPinHouse,
+  MapPinned,
   Pyramid,
   SquareChartGantt,
   TentTree,
@@ -92,6 +94,12 @@ export const adminSidebarItems: ISidebarItem[] = [
         url: "/admin/manage-tour",
         icon: TentTree,
         component: ManageTour,
+      },
+      {
+        title: "Manage Destination",
+        url: "/admin/manage-destination",
+        icon: MapPinned,
+        component: ManageDestination,
       },
     ],
   },

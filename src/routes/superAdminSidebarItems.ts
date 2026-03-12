@@ -18,7 +18,9 @@ import {
   User,
   Users,
   ShieldCheck,
+  MapPinned,
 } from "lucide-react";
+import ManageDestination from "@/pages/admin/ManageDestination";
 
 export const superAdminSidebarItems: ISidebarItem[] = [
   {
@@ -92,6 +94,12 @@ export const superAdminSidebarItems: ISidebarItem[] = [
         url: "/super_admin/manage-tour",
         icon: TentTree,
         component: ManageTour,
+      },
+      {
+        title: "Manage Destination",
+        url: "/super_admin/manage-destination",
+        icon: MapPinned,
+        component: ManageDestination,
       },
     ],
   },
