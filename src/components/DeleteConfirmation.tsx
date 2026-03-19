@@ -29,7 +29,7 @@ export default function DeleteConfirmation({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>{children}</AlertDialogTrigger>
-      <AlertDialogContent>
+      <AlertDialogContent className="min-h-44 shadow shadow-white">
         <AlertDialogHeader>
           <AlertDialogTitle>Are you sure?</AlertDialogTitle>
           <AlertDialogDescription>
@@ -38,8 +38,8 @@ export default function DeleteConfirmation({
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleConfirm}>
+          <AlertDialogCancel className="cursor-pointer">Cancel</AlertDialogCancel>
+          <AlertDialogAction className="bg-red-500 hover:bg-red-700 cursor-pointer" onClick={handleConfirm}>
             Continue
           </AlertDialogAction>
         </AlertDialogFooter>

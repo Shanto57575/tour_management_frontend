@@ -5,7 +5,7 @@ import { Container } from "@/components/shared/Container";
 const topics = ["General Inquiry", "Sales & Pricing", "Technical Support", "Partnership", "Other"];
 
 export default function Contact() {
-    const [_form, setForm] = useState({ name: "", email: "", topic: "", message: "" });
+    const [, setForm] = useState({ name: "", email: "", topic: "", message: "" });
     const [focused, setFocused] = useState<string | null>(null);
     const [sent, setSent] = useState(false);
     const [sending, setSending] = useState(false);
@@ -29,7 +29,7 @@ export default function Contact() {
             : "border-zinc-200 dark:border-zinc-800 hover:border-zinc-300 dark:hover:border-zinc-700");
 
     return (
-        <Container className="bg-white dark:bg-zinc-950 min-h-screen" innerClassName="flex flex-col items-center justify-center pt-24 pb-12">
+        <Container className="bg-white dark:bg-zinc-950 min-h-screen" innerClassName="flex flex-col items-center justify-center pt-16 pb-12">
 
             {/* Header */}
             <div className="text-center mb-12 max-w-lg">
@@ -165,7 +165,7 @@ export default function Contact() {
                         </p>
                         <button
                             onClick={() => setSent(false)}
-                            className="text-sm font-semibold text-violet-600 dark:text-violet-400
+                            className="cursor-pointer text-sm font-semibold text-violet-600 dark:text-violet-400
                 hover:text-violet-700 dark:hover:text-violet-300
                 underline underline-offset-4 transition-colors duration-200">
                             Send another message
@@ -179,7 +179,7 @@ export default function Contact() {
                 {[
                     { icon: Mail, text: "hello@trekon.app" },
                     { icon: Phone, text: "+1 (800) 835–2940" },
-                    { icon: MapPin, text: "32 Trailhead Ave, Denver" },
+                    { icon: MapPin, text: "Dhaka, Bangladesh" },
                 ].map(({ icon: Icon, text }, i) => (
                     <div key={i} className="flex items-center gap-2">
                         <Icon size={13} className="text-violet-500" />

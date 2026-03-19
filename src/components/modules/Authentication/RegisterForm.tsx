@@ -20,6 +20,9 @@ import { LoaderCircleIcon } from "lucide-react";
 import GoogleLogin from "./GoogleLogin";
 import { useRegisterMutation } from "@/redux/features/user/user.api";
 
+const strongPasswordRegex =
+  /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
 const registerSchema = z
   .object({
     name: z.string().min(3, {
@@ -28,13 +31,14 @@ const registerSchema = z
     email: z.email(),
     password: z
       .string()
-      .min(8, { error: "password must be at least 8 characters long" }),
-    confirmPassword: z
-      .string()
-      .min(8, { error: "confirm password must be at least 8 characters long" }),
+      .regex(strongPasswordRegex, {
+        error:
+          "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+      }),
+    confirmPassword: z.string(),
   })
   .refine((data) => data.password === data.confirmPassword, {
-    error: "password do not match",
+    error: "Passwords do not match",
     path: ["confirmPassword"],
   });
 
@@ -70,8 +74,9 @@ export const RegisterForm = ({
         toast.success(result.message);
         navigate("/verify", { state: result.data.email });
       }
-    } catch (error) {
-      toast.error((error as any).data?.message || "Something went wrong!");
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error:any) {
+      toast.error(error.data?.message || "Something went wrong!");
       console.error(error);
     }
   };

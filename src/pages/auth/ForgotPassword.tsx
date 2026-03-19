@@ -36,15 +36,15 @@ export default function ForgotPassword() {
                 toast.success("Password reset link sent! Please check your email.");
                 navigate("/login");
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             toast.error(error?.data?.message || "Failed to send reset link. Please try again.");
         }
     };
 
     return (
-        <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10 relative overflow-hidden bg-slate-50 dark:bg-zinc-950">
+        <div className="flex min-h-svh flex-col items-center justify-center p-6 md:p-10 relative overflow-hidden bg-purple-100 dark:bg-zinc-950">
             <div className="absolute inset-0 bg-blue-600/10 dark:bg-blue-600/5 blur-[120px] rounded-full pointer-events-none" />
-
             <div className="w-full max-w-md relative z-10">
                 <div className="flex flex-col gap-6">
                     <div className="flex flex-col items-center gap-2 text-center">

@@ -1,4 +1,4 @@
-import { CircleFadingArrowUp } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import { useState, useEffect } from "react";
 
 export default function ScrollToTopButton() {
@@ -23,7 +23,7 @@ export default function ScrollToTopButton() {
         onClick={scrollToTop}
         className="cursor-pointer fixed bottom-5 right-5 z-50 bg-purple-500 text-white p-3 rounded-full shadow-lg hover:bg-purple-600 transition"
       >
-        <CircleFadingArrowUp />
+        <ChevronUp />
       </button>
     )
   );

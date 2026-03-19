@@ -7,14 +7,34 @@ export const withAuth = (Component: ComponentType, requiredRole?: TRole) => {
   return function AuthWrapper() {
     const { data, isLoading } = useUserInfoQuery(undefined);
 
-    if (!data?.data.email && !isLoading) {
-      return <Navigate to="/login" />;
+    if (isLoading) {
+      return null;
     }
 
-    if (requiredRole && !isLoading && requiredRole !== data?.data?.role) {
-      return <Navigate to="/unauthorized" />;
+    if (!data?.data?.email) {
+      return <Navigate to="/login" replace />;
     }
 
-    if (requiredRole && !isLoading) return <Component />;
+    if (requiredRole && requiredRole !== data?.data?.role) {
+      return <Navigate to="/unauthorized" replace />;
+    }
+
+    return <Component />;
+  };
+};
+
+export const withGuest = (Component: ComponentType) => {
+  return function GuestWrapper() {
+    const { data, isLoading } = useUserInfoQuery(undefined);
+
+    if (isLoading) {
+      return null;
+    }
+
+    if (data?.data?.email) {
+      return <Navigate to="/" replace />;
+    }
+
+    return <Component />;
   };
 };

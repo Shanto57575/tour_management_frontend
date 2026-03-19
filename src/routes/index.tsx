@@ -10,7 +10,7 @@ import { DashboardLayout } from "@/components/layouts/DashboardLayout";
 import { generateRoutes } from "@/utils/generateRoutes";
 import { adminSidebarItems } from "./adminSidebarItems";
 import { userSidebarItems } from "./userSidebarItems";
-import { withAuth } from "@/utils/withAuth";
+import { withAuth, withGuest } from "@/utils/withAuth";
 import { role } from "@/constants/role";
 import type { TRole } from "@/types";
 import { UnAuthorized } from "@/pages/UnAuthorized";
@@ -19,9 +19,11 @@ import Home from "@/pages/Home/Home";
 import TourDetails from "@/pages/TourDetails";
 import { superAdminSidebarItems } from "./superAdminSidebarItems";
 import AllPlaces from "@/pages/AllPlaces";
+import AllDestinations from "@/pages/AllDestinations";
 import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import PaymentSuccess from "@/pages/PaymentSuccess";
+import DestinationDetails from "@/pages/DestinationDetails";
 
 export const router = createBrowserRouter([
   {
@@ -38,6 +40,10 @@ export const router = createBrowserRouter([
         Component: AllPlaces,
       },
       {
+        path: "all-destinations",
+        Component: AllDestinations,
+      },
+      {
         path: "about",
         Component: About,
       },
@@ -48,6 +54,10 @@ export const router = createBrowserRouter([
       {
         path: "/tour/:slug",
         Component: TourDetails,
+      },
+      {
+        path: "/destination/:division/:slug",
+        Component: DestinationDetails,
       },
       {
         path: "payment/success",
@@ -93,11 +103,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/login",
-    Component: Login,
+    Component: withGuest(Login),
   },
   {
     path: "/register",
-    Component: Register,
+    Component: withGuest(Register),
   },
   {
     path: "/verify",
@@ -105,11 +115,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "/forgot-password",
-    Component: ForgotPassword,
+    Component: withGuest(ForgotPassword),
   },
   {
     path: "/reset-password",
-    Component: ResetPassword,
+    Component: withGuest(ResetPassword),
   },
   {
     path: "/unauthorized",

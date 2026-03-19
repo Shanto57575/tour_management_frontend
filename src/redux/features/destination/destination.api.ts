@@ -28,7 +28,16 @@ export interface IGetAllDestinationsResponse {
   destinations: IDestination[];
 }
 
-type TQueryArgs = Record<string, string | number | boolean | undefined>;
+export interface IDestinationQueryArgs {
+  page?: number;
+  limit?: number;
+  searchTerm?: string;
+  division?: string;
+  isFeatured?: boolean;
+  sort?: string;
+  minPrice?: number;
+  maxPrice?: number;
+}
 
 export const destinationApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
@@ -56,7 +65,10 @@ export const destinationApi = baseApi.injectEndpoints({
       invalidatesTags: ["DESTINATION"],
     }),
 
-    getAllDestinations: builder.query<IGetAllDestinationsResponse, TQueryArgs | void>({
+    getAllDestinations: builder.query<
+      IGetAllDestinationsResponse,
+      IDestinationQueryArgs | void
+    >({
       query: (args) => {
         const params = new URLSearchParams();
 

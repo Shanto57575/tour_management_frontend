@@ -16,8 +16,14 @@ import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { LoaderCircleIcon, AlertTriangleIcon } from "lucide-react";
 
+const strongPasswordRegex =
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
 const resetPasswordSchema = z.object({
-    password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+    password: z.string().regex(strongPasswordRegex, {
+        message:
+            "Password must be at least 8 characters and include uppercase, lowercase, number, and special character.",
+    }),
     confirmPassword: z.string()
 }).refine((data) => data.password === data.confirmPassword, {
     message: "Passwords do not match",
@@ -57,6 +63,7 @@ export default function ResetPassword() {
                 toast.success("Password updated successfully! You can now log in.");
                 navigate("/login");
             }
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         } catch (error: any) {
             toast.error(error?.data?.message || "Failed to reset password. The link may have expired.");
         }
@@ -90,7 +97,7 @@ export default function ResetPassword() {
                             Set New Password
                         </h1>
                         <p className="text-muted-foreground text-sm text-balance">
-                            Please enter your new password below. Ensure it is at least 8 characters long.
+                            Use at least 8 characters with one uppercase, one lowercase, one number, and one special character.
                         </p>
                     </div>
 

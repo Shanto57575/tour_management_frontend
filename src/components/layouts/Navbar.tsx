@@ -37,8 +37,8 @@ export default function Navbar() {
 
   const navLinks = [
     { href: "/", label: "Home" },
-    { href: "/all-places", label: "All Places" },
-    { href: "/about", label: "About" },
+    { href: "/all-places", label: "Explore Tours" },
+    { href: "/about", label: "About Us" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -118,8 +118,8 @@ export default function Navbar() {
               <Link
                 to={isLoggedIn ? "/apply-guide" : "/login"}
                 className={`hidden sm:flex items-center justify-center px-4 py-1.5 text-sm font-semibold rounded-full transition-all duration-300 ${isScrolled
-                  ? "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 hover:bg-purple-200 dark:hover:bg-purple-800/50"
-                  : "bg-white/20 dark:bg-white/10 text-gray-900 dark:text-white hover:bg-white/30 dark:hover:bg-white/20 backdrop-blur-sm border border-white/30 dark:border-white/20"
+                  ? "bg-purple-500 dark:bg-purple-700 text-white dark:text-white hover:bg-purple-500 dark:hover:bg-purple-500"
+                  : "bg-white/20 dark:bg-white/10 text-purple-700 hover:text-white dark:text-white hover:bg-purple-700 dark:hover:bg-white/20 backdrop-blur-sm border border-purple-500 dark:border-white/20"
                   }`}
               >
                 Become a Guide
