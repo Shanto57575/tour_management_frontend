@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useMyBookingsQuery, useReInitPaymentMutation } from "@/redux/features/booking/booking.api";
 import FullPageLoader from "@/utils/FullPageLoader";
 import { CalendarIcon, MapPin, Users, CreditCard, ChevronRight, CheckCircle2, XCircle, AlertCircle } from "lucide-react";
@@ -25,7 +26,6 @@ export const Bookings = () => {
   }
 
   const bookings = bookingsResponse?.data || [];
-  console.log("bookings", bookings)
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "-";
@@ -38,13 +38,13 @@ export const Bookings = () => {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case "COMPLETE":
+      case "CONFIRMED":
         return (
           <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold">
             <CheckCircle2 size={14} /> Completed
           </span>
         );
-      case "CANCEL":
+      case "CANCELLED":
         return (
           <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 text-xs font-bold">
             <XCircle size={14} /> Cancelled
@@ -76,10 +76,13 @@ export const Bookings = () => {
     return <span className="text-gray-500 font-bold text-sm bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-md capitalize">{status?.toLowerCase()}</span>;
   };
 
-  const handlePayNow = async (booking: any) => {
+  const handlePayNow = async (booking:any) => {
     const toastId = toast.loading("Preparing payment...");
     try {
-      const res = await reInitPayment(booking._id).unwrap();
+      const res = await reInitPayment({
+        bookingId: booking._id,
+        method: "CARD",
+      }).unwrap();
       if (res?.data?.clientSecret) {
         toast.dismiss(toastId);
         // Save booking data for the success page
@@ -104,8 +107,11 @@ export const Bookings = () => {
           tourImage: booking.tour?.images?.[0] ?? null,
         });
       }
-    } catch (error: any) {
-      toast.error(error?.data?.message || "Failed to initialize payment", { id: toastId });
+    } catch (error: unknown) {
+      const apiError = error as { data?: { message?: string } };
+      toast.error(apiError?.data?.message || "Failed to initialize payment", {
+        id: toastId,
+      });
     }
   };
 
@@ -150,7 +156,7 @@ export const Bookings = () => {
         </div>
       ) : (
         <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-          {bookings.map((booking: any) => {
+          {bookings.map((booking:any) => {
             const tour = booking.tour;
             const payment = booking.payment;
 
@@ -233,7 +239,7 @@ export const Bookings = () => {
                         </button>
                       )}
 
-                      {booking.status === "COMPLETE" && payment?.invoiceUrl && (
+                      {booking.status === "CONFIRMED" && payment?.invoiceUrl && (
                         <a
                           href={payment.invoiceUrl}
                           target="_blank"

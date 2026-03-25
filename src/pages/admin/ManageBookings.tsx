@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useAllBookingsQuery, useUpdateBookingMutation } from "@/redux/features/booking/booking.api";
 import { Input } from "@/components/ui/input";
@@ -36,9 +37,9 @@ export const ManageBookings = () => {
         try {
             await updateBooking({ bookingId, bookingData: { status: newStatus } }).unwrap();
             toast.success(`Booking status updated successfully`, { id: toastId });
-        } catch (error: any) {
-            console.log(error);
-            toast.error(error?.data?.message || "Failed to update booking status", { id: toastId });
+        } catch (error: unknown) {
+            const apiError = error as { data?: { message?: string } };
+            toast.error(apiError?.data?.message || "Failed to update booking status", { id: toastId });
         }
     };
 
@@ -52,8 +53,6 @@ export const ManageBookings = () => {
 
     const bookings = bookingsResponse?.data?.bookings || [];
     const meta = bookingsResponse?.data?.meta || { page: 1, totalPage: 1 };
-    console.log("bookings==>", bookings);
-
     const formatDate = (dateString?: string) => {
         if (!dateString) return "-";
         return new Date(dateString).toLocaleDateString("en-US", {
@@ -94,9 +93,8 @@ export const ManageBookings = () => {
                     <SelectContent>
                         <SelectItem value="all">All Status</SelectItem>
                         <SelectItem value="PENDING">Pending</SelectItem>
-                        <SelectItem value="COMPLETE">Complete</SelectItem>
-                        <SelectItem value="CANCEL">Cancelled</SelectItem>
-                        <SelectItem value="FAILED">Failed</SelectItem>
+                        <SelectItem value="CONFIRMED">Confirmed</SelectItem>
+                        <SelectItem value="CANCELLED">Cancelled</SelectItem>
                     </SelectContent>
                 </Select>
 
@@ -201,18 +199,20 @@ export const ManageBookings = () => {
                                                 value={booking.status}
                                                 onValueChange={(val) => handleStatusUpdate(booking._id, val)}
                                             >
-                                                <SelectTrigger className={`w-[130px] h-8 text-xs font-bold border-transparent focus:ring-0 focus:ring-offset-0 ${booking.status === 'COMPLETE' ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400' :
-                                                    booking.status === 'FAILED' ? 'bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400' :
-                                                        booking.status === 'CANCEL' ? 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300' :
-                                                            'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
+                                                <SelectTrigger className={`w-[130px] h-8 text-xs font-bold border-transparent focus:ring-0 focus:ring-offset-0 ${booking.status === 'CONFIRMED'
+                                                    ? 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400'
+                                                    : booking.status === 'CANCELLED'
+                                                        ? 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300'
+                                                        : 'bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400'
                                                     }`}>
                                                     <SelectValue placeholder="Status" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="PENDING">PENDING</SelectItem>
-                                                    <SelectItem value="COMPLETE">COMPLETE</SelectItem>
-                                                    <SelectItem value="CANCEL">CANCEL</SelectItem>
-                                                    <SelectItem value="FAILED">FAILED</SelectItem>
+                                                    <SelectItem value="PENDING" disabled>
+                                                        PENDING
+                                                    </SelectItem>
+                                                    <SelectItem value="CONFIRMED">CONFIRMED</SelectItem>
+                                                    <SelectItem value="CANCELLED">CANCELLED</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         </TableCell>

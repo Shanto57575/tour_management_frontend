@@ -24,11 +24,14 @@ import About from "@/pages/About";
 import Contact from "@/pages/Contact";
 import PaymentSuccess from "@/pages/PaymentSuccess";
 import DestinationDetails from "@/pages/DestinationDetails";
+import FaqSection from "@/components/modules/Home/FaqSection";
+import NotFound from "@/pages/NotFound";
 
 export const router = createBrowserRouter([
   {
     path: "/",
     Component: App,
+    errorElement: <NotFound/>,
     children: [
       {
         index: true,
@@ -50,6 +53,10 @@ export const router = createBrowserRouter([
       {
         path: "contact",
         Component: Contact,
+      },
+      {
+        path: "faq",
+        Component: FaqSection,
       },
       {
         path: "/tour/:slug",

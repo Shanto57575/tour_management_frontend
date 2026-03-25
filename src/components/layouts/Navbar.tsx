@@ -40,6 +40,7 @@ export default function Navbar() {
     { href: "/all-places", label: "Explore Tours" },
     { href: "/about", label: "About Us" },
     { href: "/contact", label: "Contact" },
+    { href: "/faq", label: "Faq" },
   ];
 
   let dashboardLink = null;
@@ -76,12 +77,10 @@ export default function Navbar() {
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-10">
         <div className="flex items-center justify-between h-16">
 
-          {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <img src={logo} className="w-16 h-16 drop-shadow-md" alt="TrekOn logo" />
           </Link>
 
-          {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => (
               <NavLink

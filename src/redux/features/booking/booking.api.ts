@@ -4,7 +4,7 @@ export const bookingApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     createBooking: builder.mutation({
       query: (bookingData) => ({
-        url: "/booking/create-booking",
+        url: "/booking",
         method: "POST",
         data: bookingData,
       }),
@@ -12,7 +12,7 @@ export const bookingApi = baseApi.injectEndpoints({
     }),
     updateBooking: builder.mutation({
       query: ({ bookingId, bookingData }) => ({
-        url: `/booking/${bookingId}`,
+        url: `/booking/${bookingId}/status`,
         method: "PATCH",
         data: bookingData,
       }),
@@ -40,11 +40,21 @@ export const bookingApi = baseApi.injectEndpoints({
       }),
       providesTags: ["BOOKING"],
     }),
-    reInitPayment: builder.mutation({
-      query: (bookingId) => ({
-        url: `/booking/re-init-payment/${bookingId}`,
+    createPaymentIntent: builder.mutation({
+      query: ({ bookingId, method = "CARD" }) => ({
+        url: "/payment/intent",
         method: "POST",
+        data: { bookingId, method },
       }),
+      invalidatesTags: ["BOOKING"],
+    }),
+    reInitPayment: builder.mutation({
+      query: ({ bookingId, method = "CARD" }) => ({
+        url: "/payment/intent",
+        method: "POST",
+        data: { bookingId, method },
+      }),
+      invalidatesTags: ["BOOKING"],
     }),
   }),
 });
@@ -55,5 +65,6 @@ export const {
   useAllBookingsQuery,
   useMyBookingsQuery,
   useGetSingleBookingQuery,
+  useCreatePaymentIntentMutation,
   useReInitPaymentMutation,
 } = bookingApi;

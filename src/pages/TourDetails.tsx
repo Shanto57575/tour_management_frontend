@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useParams } from "react-router";
 import { useGetTourQuery } from "@/redux/features/tour/tour.api";
-import { useCreateBookingMutation } from "@/redux/features/booking/booking.api";
+import {
+  useCreateBookingMutation,
+  useCreatePaymentIntentMutation,
+} from "@/redux/features/booking/booking.api";
 import { CheckoutModal } from "@/components/modules/Payment/CheckoutModal";
 import {
   MapPin,
@@ -24,6 +27,7 @@ export default function TourDetails() {
   const { slug } = useParams();
   const { data: TourData, isLoading } = useGetTourQuery(slug);
   const [createBooking, { isLoading: isBooking }] = useCreateBookingMutation();
+  const [createPaymentIntent] = useCreatePaymentIntentMutation();
   const { data: user } = useUserInfoQuery(undefined);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [guestCount, setGuestCount] = useState<number>(1);
@@ -63,18 +67,47 @@ export default function TourDetails() {
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) {
+    if (!user?.data) {
       toast.error("Please Login First");
       return;
     }
+
+    if (!user.data.phone) {
+      toast.error("Please add your phone number in your profile before booking");
+      return;
+    }
+
     try {
-      const payload: { tour: string; guestCount: number } = {
+      const bookingDate =
+        TourData?.startDate ?? new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString();
+
+      const payload = {
         tour: TourData?._id,
         guestCount,
+        bookingDate,
+        contactInfo: {
+          name: user.data.name,
+          phone: user.data.phone,
+          email: user.data.email,
+        },
       };
-      const res = await createBooking(payload).unwrap();
-      if (res?.data?.clientSecret) {
-        // Store booking info for the success page (Stripe redirect provides no booking data)
+      const bookingRes = await createBooking(payload).unwrap();
+      const bookingId = bookingRes?.data?._id;
+
+      if (!bookingId) {
+        toast.success("Booking submitted successfully");
+        return;
+      }
+
+      const paymentRes = await createPaymentIntent({
+        bookingId,
+        method: "CARD",
+      }).unwrap();
+
+      if (paymentRes?.data?.clientSecret) {
+        const unitCost = Number(TourData.pricePerPerson || 0);
+        const amount = Number(paymentRes.data.payment?.amount ?? unitCost * guestCount);
+
         localStorage.setItem(
           "pendingBooking",
           JSON.stringify({
@@ -82,27 +115,33 @@ export default function TourDetails() {
             tourLocation: TourData.location,
             tourImage: TourData.images?.[0] ?? null,
             guestCount,
-            amount: Number(TourData.costFrom || 0) * guestCount,
-            costPerPerson: Number(TourData.costFrom || 0),
+            amount,
+            costPerPerson: unitCost,
             startDate: TourData.startDate,
             endDate: TourData.endDate,
-            bookingId: res.data.booking?._id,
-          })
+            bookingId,
+          }),
         );
+
         setCheckoutData({
-          clientSecret: res.data.clientSecret,
-          amount: Number(TourData.costFrom || 0) * guestCount,
+          clientSecret: paymentRes.data.clientSecret,
+          amount,
         });
-      } else {
-        toast.success("Booking submitted successfully! We'll contact you soon.");
+        return;
       }
-    } catch (error: any) {
-      console.log("error", error)
-      if (error.status === 401) {
+
+      toast.success("Booking submitted successfully");
+    } catch (error: unknown) {
+      const apiError = error as {
+        status?: number;
+        data?: { message?: string };
+      };
+
+      if (apiError.status === 401) {
         return toast.error("Session Over! Please Login First");
       }
       toast.error(
-        error.data?.message || "Failed to submit booking. Please try again."
+        apiError.data?.message || "Failed to submit booking. Please try again.",
       );
     }
   };
@@ -231,7 +270,7 @@ export default function TourDetails() {
           </p>
         </div>
         <button
-          onClick={handleBookingSubmit as any}
+          onClick={handleBookingSubmit}
           disabled={isBooking}
           className="px-5 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-semibold transition-all duration-200 disabled:opacity-50 shadow-lg shadow-indigo-600/30"
         >
@@ -528,7 +567,7 @@ export default function TourDetails() {
 
                   {/* CTA */}
                   <button
-                    onClick={handleBookingSubmit as any}
+                    onClick={handleBookingSubmit}
                     disabled={isBooking}
                     className="w-full py-3.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-sm transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-indigo-600/30 hover:shadow-indigo-600/40 hover:-translate-y-0.5"
                   >
@@ -633,7 +672,7 @@ export default function TourDetails() {
             </div>
 
             <button
-              onClick={handleBookingSubmit as any}
+              onClick={handleBookingSubmit}
               disabled={isBooking}
               className="w-full py-4 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-base transition-all disabled:opacity-50 shadow-lg shadow-indigo-600/30"
             >

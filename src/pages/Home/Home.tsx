@@ -7,7 +7,6 @@ import TourPackages from "@/components/modules/Home/TourPackages";
 import WhyChooseUs from "@/components/modules/Home/WhyChooseUs";
 import TravelBlog from "@/components/modules/Home/TravelBlog";
 import Newsletter from "@/components/modules/Home/Newsletter";
-import FaqSection from "@/components/modules/Home/FaqSection";
 
 export default function Home() {
   return (
@@ -20,7 +19,6 @@ export default function Home() {
       <HowItWorks />
       <WhyChooseUs />
       <Testimonials />
-      <FaqSection />
       <Newsletter />
     </div>
   );
