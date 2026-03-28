@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { useGetAllUsersQuery, useUpdateUserMutation } from "@/redux/features/user/user.api";
 import { Button } from "@/components/ui/button";
@@ -24,7 +25,7 @@ export const ManageUsers = () => {
 
     const { data: usersResponse, isLoading } = useGetAllUsersQuery({
         page,
-        limit: 10,
+        limit: 50,
         searchTerm: searchTerm || undefined,
         role: roleFilter !== "all" ? roleFilter : undefined,
     });

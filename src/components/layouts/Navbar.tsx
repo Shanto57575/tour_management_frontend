@@ -139,7 +139,7 @@ export default function Navbar() {
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <button
-                  className={`relative flex items-center justify-center w-9 h-9 rounded-full ring-2 transition-all duration-200 focus:outline-none overflow-hidden cursor-pointer ${isScrolled
+                  className={`relative flex items-center border border-purple-200 justify-center w-9 h-9 rounded-full ring-2 transition-all duration-200 focus:outline-none overflow-hidden cursor-pointer ${isScrolled
                     ? "ring-purple-200 dark:ring-purple-700 hover:ring-purple-400 dark:hover:ring-purple-500 bg-gray-100 dark:bg-gray-800"
                     : "ring-white/40 dark:ring-white/30 hover:ring-white/70 dark:hover:ring-white/50 bg-white/20 dark:bg-white/10"
                     }`}
@@ -169,7 +169,7 @@ export default function Navbar() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent
-                className="w-56 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl bg-white dark:bg-gray-900"
+                className="font-merriweather w-56 mt-2 rounded-xl border border-gray-200 dark:border-gray-700 shadow-xl bg-white dark:bg-gray-900"
                 align="end"
               >
                 <DropdownMenuLabel className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 px-3 pt-3 pb-1">

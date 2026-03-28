@@ -62,7 +62,7 @@ export const SetPasswordModal = ({
 
   return (
     <Dialog open={open} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="w-[95vw] sm:max-w-md">
         <DialogHeader>
           <DialogTitle>Set Your Password</DialogTitle>
           <DialogDescription>

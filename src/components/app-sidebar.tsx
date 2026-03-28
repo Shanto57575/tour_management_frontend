@@ -3,6 +3,7 @@ import Logo from "../assets/icons/trekOn.png";
 import {
   Sidebar,
   SidebarContent,
+  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -102,7 +103,14 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
           </SidebarGroup>
         ))}
       </SidebarContent>
-      <Button onClick={handleLogout} className="fixed bottom-0 w-full rounded-none hover:bg-purple-700 cursor-pointer">Logout</Button>
+      <SidebarFooter className="p-3 border-t border-sidebar-border/50">
+        <Button
+          onClick={handleLogout}
+          className="w-full hover:bg-purple-700 cursor-pointer"
+        >
+          Logout
+        </Button>
+      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

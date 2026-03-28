@@ -105,7 +105,7 @@ function DestinationCard({
         </div>
       </div>
 
-      <div className="p-4 font-open-sans bg-white dark:bg-zinc-900/70 border-t border-purple-100 dark:border-purple-900/30">
+      <div className="p-4 bg-white dark:bg-zinc-900/70 border-t border-purple-100 dark:border-purple-900/30">
         <p className="text-xs text-muted-foreground leading-relaxed mb-4 line-clamp-2">
           {`${destination.description?.slice(0,120)}....`}
         </p>

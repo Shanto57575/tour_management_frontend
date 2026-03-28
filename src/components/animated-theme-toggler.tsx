@@ -3,41 +3,45 @@ import { useState, useRef, useEffect } from "react";
 import { flushSync } from "react-dom";
 import { cn } from "@/lib/utils";
 
-type props = {
+type Props = {
   className?: string;
 };
 
-export const AnimatedThemeToggler = ({ className }: props) => {
-  const getInitialTheme = () => {
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem("theme");
-      if (stored === "dark") return true;
-      if (stored === "light") return false;
-    }
-    return false;
-  };
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(getInitialTheme);
+export const AnimatedThemeToggler = ({ className }: Props) => {
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+
   useEffect(() => {
-    if (typeof window !== "undefined") {
-      if (isDarkMode) {
-        document.documentElement.classList.add("dark");
-        localStorage.setItem("theme", "dark");
-      } else {
-        document.documentElement.classList.remove("dark");
-        localStorage.setItem("theme", "light");
-      }
-    }
-  }, [isDarkMode]);
+    if (typeof window === "undefined") return;
+
+    const savedTheme = localStorage.getItem("theme");
+    const shouldUseDark = savedTheme === "dark";
+
+    setIsDarkMode(shouldUseDark);
+    document.documentElement.classList.toggle("dark", shouldUseDark);
+    setIsHydrated(true);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined" || !isHydrated) return;
+
+    document.documentElement.classList.toggle("dark", isDarkMode);
+    localStorage.setItem("theme", isDarkMode ? "dark" : "light");
+  }, [isDarkMode, isHydrated]);
+
   const buttonRef = useRef<HTMLButtonElement | null>(null);
+
   const changeTheme = async () => {
     if (!buttonRef.current) return;
 
+    if (!document.startViewTransition) {
+      setIsDarkMode((prev) => !prev);
+      return;
+    }
+
     await document.startViewTransition(() => {
       flushSync(() => {
-        setIsDarkMode((prev) => {
-          const newMode = !prev;
-          return newMode;
-        });
+        setIsDarkMode((prev) => !prev);
       });
     }).ready;
 

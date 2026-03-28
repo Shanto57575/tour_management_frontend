@@ -4,6 +4,14 @@ import { DestinationFilterPanel } from "@/components/modules/Destination/Destina
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+import {
   Table,
   TableBody,
   TableCell,
@@ -12,6 +20,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetAllDivisionsQuery } from "@/redux/features/division/division.api";
+import { useGetDistrictsByDivisionQuery } from "@/redux/features/district/district.api";
+import { skipToken } from "@reduxjs/toolkit/query";
 import {
   type IDestination,
   useGetAllDestinationsQuery,
@@ -19,7 +29,7 @@ import {
 } from "@/redux/features/destination/destination.api";
 import FullPageLoader from "@/utils/FullPageLoader";
 import Pagination from "@/utils/Pagination";
-import { PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
+import { FilterIcon, PencilIcon, PlusIcon, Trash2Icon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 
@@ -31,9 +41,14 @@ interface IDivisionOption {
 const ManageDestination = () => {
   const [page, setPage] = useState(1);
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedDivisions, setSelectedDivisions] = useState<string[]>([]);
+  const [selectedDivision, setSelectedDivision] = useState("all");
+  const [selectedDistricts, setSelectedDistricts] = useState<string[]>([]);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   const { data: divisionsResponse } = useGetAllDivisionsQuery(undefined);
+  const districtQueryArg =
+    selectedDivision !== "all" ? { division: selectedDivision } : skipToken;
+  const { data: districtResponse = [] } = useGetDistrictsByDivisionQuery(districtQueryArg);
 
   const divisions = useMemo(() => {
     const response = divisionsResponse as
@@ -43,40 +58,54 @@ const ManageDestination = () => {
     return response.division ?? response.data?.division ?? [];
   }, [divisionsResponse]);
 
-  const divisionFilter = selectedDivisions.length
-    ? selectedDivisions.join(",")
+  const divisionFilter = selectedDivision !== "all" ? selectedDivision : undefined;
+  const districtFilter = selectedDistricts.length
+    ? selectedDistricts.join(",")
     : undefined;
+
+  const districtOptions = useMemo(() => districtResponse, [districtResponse]);
 
   const { data, isLoading } = useGetAllDestinationsQuery({
     page,
     limit: 10,
     searchTerm: searchTerm || undefined,
     division: divisionFilter,
+    district: districtFilter,
   });
 
   const [removeDestination] = useRemoveDestinationMutation();
 
   const destinations = data?.destinations ?? [];
   const meta = data?.meta ?? { page: 1, totalPage: 1 };
-  const hasActiveFilters = searchTerm.length > 0 || selectedDivisions.length > 0;
+  const hasActiveFilters =
+    searchTerm.length > 0 ||
+    selectedDivision !== "all" ||
+    selectedDistricts.length > 0;
 
   const handleSearchChange = (value: string) => {
     setSearchTerm(value);
     setPage(1);
   };
 
-  const toggleDivision = (divisionId: string) => {
-    setSelectedDivisions((prev) =>
-      prev.includes(divisionId)
-        ? prev.filter((id) => id !== divisionId)
-        : [...prev, divisionId],
+  const selectDivision = (divisionId: string) => {
+    setSelectedDivision(divisionId);
+    setSelectedDistricts([]);
+    setPage(1);
+  };
+
+  const toggleDistrict = (districtName: string) => {
+    setSelectedDistricts((prev) =>
+      prev.includes(districtName)
+        ? prev.filter((name) => name !== districtName)
+        : [...prev, districtName],
     );
     setPage(1);
   };
 
   const clearFilters = () => {
     setSearchTerm("");
-    setSelectedDivisions([]);
+    setSelectedDivision("all");
+    setSelectedDistricts([]);
     setPage(1);
   };
 
@@ -101,8 +130,6 @@ const ManageDestination = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 lg:py-8">
-
-      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-7">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-50">
@@ -112,35 +139,87 @@ const ManageDestination = () => {
             View, add, and manage travel destinations
           </p>
         </div>
-        <DestinationFormModal
-          mode="create"
-          trigger={
-            <Button className="gap-2 bg-purple-600 hover:bg-purple-700 text-white w-full sm:w-auto">
-              <PlusIcon className="h-4 w-4" />
-              Add Destination
-            </Button>
-          }
-        />
+        <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+          <Sheet open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+            <SheetTrigger asChild>
+              <Button type="button" variant="outline" className="lg:hidden flex-1 sm:flex-none">
+                <FilterIcon className="h-4 w-4" />
+                Filters
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="p-0 w-[90vw] sm:max-w-md overflow-hidden">
+              <SheetHeader>
+                <SheetTitle>Destination Filters</SheetTitle>
+                <SheetDescription>Refine destinations by search, division, and district.</SheetDescription>
+              </SheetHeader>
+              <div className="px-4 pb-4 h-[calc(100vh-88px)] overflow-y-auto">
+                <DestinationFilterPanel
+                  searchTerm={searchTerm}
+                  selectedDivision={selectedDivision}
+                  selectedDistricts={selectedDistricts}
+                  divisions={divisions}
+                  districts={districtOptions}
+                  onSearchChange={handleSearchChange}
+                  onSelectDivision={selectDivision}
+                  onDistrictToggle={toggleDistrict}
+                  onClearDivision={() => {
+                    setSelectedDivision("all");
+                    setSelectedDistricts([]);
+                    setPage(1);
+                  }}
+                  onClearDistrict={() => {
+                    setSelectedDistricts([]);
+                    setPage(1);
+                  }}
+                  onClearFilters={clearFilters}
+                  hasActiveFilters={hasActiveFilters}
+                />
+              </div>
+            </SheetContent>
+          </Sheet>
+
+          <DestinationFormModal
+            mode="create"
+            trigger={
+              <Button className="gap-2 bg-purple-600 hover:bg-purple-700 text-white w-full sm:w-auto">
+                <PlusIcon className="h-4 w-4" />
+                Add Destination
+              </Button>
+            }
+          />
+        </div>
       </div>
 
       {/* Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
 
         {/* Filter Sidebar */}
-        <div className="lg:col-span-1">
+        <div className="hidden lg:block lg:col-span-1 lg:sticky lg:top-4 self-start">
           <DestinationFilterPanel
             searchTerm={searchTerm}
-            selectedDivisions={selectedDivisions}
+            selectedDivision={selectedDivision}
+            selectedDistricts={selectedDistricts}
             divisions={divisions}
+            districts={districtOptions}
             onSearchChange={handleSearchChange}
-            onDivisionToggle={toggleDivision}
+            onSelectDivision={selectDivision}
+            onDistrictToggle={toggleDistrict}
+            onClearDivision={() => {
+              setSelectedDivision("all");
+              setSelectedDistricts([]);
+              setPage(1);
+            }}
+            onClearDistrict={() => {
+              setSelectedDistricts([]);
+              setPage(1);
+            }}
             onClearFilters={clearFilters}
             hasActiveFilters={hasActiveFilters}
           />
         </div>
 
         {/* Main Content */}
-        <div className="lg:col-span-3 space-y-4">
+        <div className="lg:col-span-3 space-y-4 pr-1">
           {isLoading ? (
             <div className="flex justify-center items-center py-24 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-black">
               <FullPageLoader />
@@ -169,6 +248,9 @@ const ManageDestination = () => {
                         </TableHead>
                         <TableHead className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                           Division
+                        </TableHead>
+                        <TableHead className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                          District
                         </TableHead>
                         <TableHead className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
                           Starting Price
@@ -200,6 +282,11 @@ const ManageDestination = () => {
                             {typeof item.division === "string"
                               ? item.division
                               : item.division?.name || "—"}
+                          </TableCell>
+
+                          {/* District */}
+                          <TableCell className="text-sm text-gray-500 dark:text-gray-400 whitespace-nowrap">
+                            {item.district || "—"}
                           </TableCell>
 
                           {/* Price */}

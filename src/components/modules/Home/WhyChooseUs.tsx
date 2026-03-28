@@ -61,6 +61,7 @@ function useInView(threshold = 0.15) {
     return [ref, visible];
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function FeatureCard({ feature, index }: { feature: any, index: number }) {
     const [ref, visible] = useInView();
     const Icon = feature.icon;

@@ -81,6 +81,15 @@ export default function HeroSection() {
 
   return (
     <Container className="relative overflow-hidden bg-background">
+      {/* ── Grid background (full section width) ── */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(139,92,246,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.045) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+        }}
+      />
+
       <div className="relative flex flex-col items-center justify-center min-h-[90vh] py-20 w-full pt-32">
         <style>{`
         @keyframes floatY {
@@ -100,15 +109,6 @@ export default function HeroSection() {
           to   { transform: translateX(-50%); }
         }
       `}</style>
-
-        {/* ── Grid background ── */}
-        <div className="absolute inset-0 pointer-events-none"
-          style={{
-            backgroundImage:
-              "linear-gradient(rgba(139,92,246,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.045) 1px, transparent 1px)",
-            backgroundSize: "56px 56px",
-          }}
-        />
 
         {/* ── Ambient center glow ── */}
         <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
@@ -181,7 +181,6 @@ export default function HeroSection() {
               <span className="bg-gradient-to-r from-purple-500 via-violet-500 to-purple-600 bg-clip-text text-transparent">
                 Bangladesh
               </span>
-              {/* Underline squiggle */}
               <svg className="absolute -bottom-2 left-0 w-full" height="8" viewBox="0 0 300 8" preserveAspectRatio="none">
                 <path d="M0,5 Q37.5,0 75,5 Q112.5,10 150,5 Q187.5,0 225,5 Q262.5,10 300,5"
                   stroke="url(#squiggleGrad)" strokeWidth="2.5" fill="none" strokeLinecap="round"
@@ -296,7 +295,7 @@ export default function HeroSection() {
           style={{ animation: "tickerScroll 28s linear infinite" }}
         >
           {[...Array(2)].map((_, rep) => (
-            <span key={rep} className="flex items-center font-open-sans">
+            <span key={rep} className="flex items-center font-merriweather">
               {["Sundarbans", "Cox's Bazar", "Bandarban", "Sreemangal", "Sajek Valley", "Rangamati", "Bagerhat", "Kuakata", "Sylhet", "Jaflong", "Ratargul", "Kaptai Lake"].map((place) => (
                 <span key={place} className="inline-flex items-center gap-2 px-6">
                   <span className="w-1 h-1 rounded-full bg-purple-400" />

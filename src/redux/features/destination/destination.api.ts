@@ -33,6 +33,7 @@ export interface IDestinationQueryArgs {
   limit?: number;
   searchTerm?: string;
   division?: string;
+  district?: string;
   isFeatured?: boolean;
   sort?: string;
   minPrice?: number;

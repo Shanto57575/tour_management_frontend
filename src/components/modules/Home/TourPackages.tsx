@@ -177,6 +177,14 @@ export default function TourPackages() {
   return (
     <Container className="relative py-20 overflow-hidden bg-background">
       <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_top_left,rgba(139,92,246,0.08),transparent_45%)]" />
+      {/* ── Grid background (full section width) ── */}
+      <div className="absolute inset-0 pointer-events-none"
+        style={{
+          backgroundImage:
+            "linear-gradient(rgba(139,92,246,0.045) 1px, transparent 1px), linear-gradient(90deg, rgba(139,92,246,0.045) 1px, transparent 1px)",
+          backgroundSize: "56px 56px",
+        }}
+      />
 
       <div className="relative">
         <Header />

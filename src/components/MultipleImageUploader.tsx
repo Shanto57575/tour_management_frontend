@@ -27,7 +27,7 @@ export default function MultipleImageUploader({
       getInputProps,
     },
   ] = useFileUpload({
-    accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/gif",
+    accept: "image/svg+xml,image/png,image/jpeg,image/jpg,image/webp",
     maxSize,
     multiple: true,
     maxFiles,
@@ -44,7 +44,6 @@ export default function MultipleImageUploader({
 
   return (
     <div className="flex-1 flex-col gap-2">
-      {/* Drop area */}
       <div
         onDragEnter={handleDragEnter}
         onDragLeave={handleDragLeave}
@@ -114,7 +113,7 @@ export default function MultipleImageUploader({
             </div>
             <p className="mb-1.5 text-sm font-medium">Drop your images here</p>
             <p className="text-muted-foreground text-xs">
-              SVG, PNG, JPG or GIF (max. {maxSizeMB}MB)
+              SVG, PNG, JPG or WEBP (max. {maxSizeMB}MB)
             </p>
             <Button
               type="button"

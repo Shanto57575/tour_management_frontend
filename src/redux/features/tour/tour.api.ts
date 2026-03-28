@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { baseApi } from "@/redux/baseApi";
 
 export const tourApi = baseApi.injectEndpoints({
@@ -23,9 +24,18 @@ export const tourApi = baseApi.injectEndpoints({
         const params = new URLSearchParams();
         if (args) {
           Object.keys(args).forEach((key) => {
-            if (args[key]) {
-              params.append(key, args[key] as string);
+            const value = args[key];
+
+            if (
+              value === undefined ||
+              value === null ||
+              value === "" ||
+              (Array.isArray(value) && value.length === 0)
+            ) {
+              return;
             }
+
+            params.append(key, Array.isArray(value) ? value.join(",") : String(value));
           });
         }
         return {

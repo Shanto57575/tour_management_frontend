@@ -116,7 +116,7 @@ export const Bookings = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto p-4 md:p-6 lg:ml-20">
+    <div className="w-full max-w-7xl mx-auto p-4 md:p-6">
 
       {/* Stripe Checkout Modal */}
       {checkoutData && (
@@ -129,7 +129,7 @@ export const Bookings = () => {
       )}
       <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 pb-4 border-b border-gray-200 dark:border-gray-800">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-2 font-merriweather">
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-gray-900 dark:text-white mb-2 font-merriweather">
             My Bookings
           </h1>
           <p className="text-gray-500 dark:text-gray-400 text-sm">
@@ -166,7 +166,7 @@ export const Bookings = () => {
                 className="group flex flex-col sm:flex-row bg-white dark:bg-zinc-900 rounded-2xl border border-gray-200 dark:border-zinc-800 overflow-hidden shadow-sm hover:shadow-xl hover:border-indigo-200 dark:hover:border-indigo-800/50 transition-all duration-300"
               >
                 {/* Image Section */}
-                <div className="sm:w-48 h-48 sm:h-auto flex-shrink-0 relative overflow-hidden bg-gray-100 dark:bg-zinc-800">
+                <div className="h-48 sm:w-40 sm:h-auto flex-shrink-0 relative overflow-hidden bg-gray-100 dark:bg-zinc-800">
                   {tour?.images?.[0] ? (
                     <img
                       src={tour.images[0]}
@@ -185,14 +185,14 @@ export const Bookings = () => {
                 </div>
 
                 {/* Content Section */}
-                <div className="flex-1 p-5 flex flex-col">
+                <div className="flex-1 p-3 sm:p-5 flex flex-col">
                   <div className="flex-1">
                     <div className="flex items-start justify-between gap-4 mb-2">
                       <h3 className="text-lg font-bold text-gray-900 dark:text-white line-clamp-2">
                         {tour?.title || "Tour details unavailable"}
                       </h3>
                       <div className="text-right flex-shrink-0">
-                        <span className="text-xl font-bold text-indigo-600 dark:text-indigo-400">
+                        <span className="text-lg sm:text-xl font-bold text-indigo-600 dark:text-indigo-400">
                           ৳{payment?.amount?.toLocaleString() || "0"}
                         </span>
                         <div className="mt-1">
@@ -223,7 +223,7 @@ export const Bookings = () => {
                     </div>
                   </div>
 
-                  <div className="mt-6 pt-4 border-t border-gray-100 dark:border-zinc-800 flex items-center justify-between">
+                  <div className="mt-4 pt-4 border-t border-gray-100 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-2">
                     <div className="text-xs text-gray-500 font-mono">
                       Ref: {booking._id.substring(booking._id.length - 8).toUpperCase()}
                     </div>

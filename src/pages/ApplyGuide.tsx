@@ -409,7 +409,7 @@ export default function ApplyGuide() {
                   <Button
                     type="button"
                     onClick={form.handleSubmit(onSubmit)}
-                    className="bg-purple-600 hover:bg-purple-700 text-white"
+                    className="cursor-pointer bg-purple-600 hover:bg-purple-700 text-white"
                     disabled={isLoading}
                   >
                     {isLoading ? (

@@ -156,7 +156,7 @@ export function CheckoutModal({
             {/* Modal card */}
             <div className="relative z-10 w-full max-w-md bg-white dark:bg-zinc-900 rounded-2xl border border-slate-200 dark:border-zinc-800 shadow-2xl overflow-hidden animate-in fade-in zoom-in-95 duration-200">
                 {/* Header */}
-                <div className="flex items-center justify-between px-6 py-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-800/60">
+                <div className="flex items-center justify-between px-4 sm:px-6 py-4 border-b border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-800/60">
                     <div className="flex items-center gap-2.5">
                         <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center">
                             <ShieldCheck className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
@@ -179,7 +179,7 @@ export function CheckoutModal({
                 </div>
 
                 {/* Body */}
-                <div className="p-6">
+                <div className="p-4 sm:p-6">
                     <Elements
                         stripe={stripePromise}
                         options={{

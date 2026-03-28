@@ -51,6 +51,44 @@ export interface IGuideApplication {
   statusHistory: IStatusLog[];
   createdAt?: string;
   updatedAt?: string;
+  guideProfile?: {
+    _id?: string;
+    isActive?: boolean;
+    isAvailable?: boolean;
+    avgRating?: number;
+    totalReviews?: number;
+    completedTours?: number;
+    responseRate?: number;
+    isFeatured?: boolean;
+  } | null;
+}
+
+export interface IGuideProfile {
+  _id: string;
+  user:
+    | string
+    | {
+        _id: string;
+        name?: string;
+        email?: string;
+        picture?: string;
+        phone?: string;
+      };
+  application?: IGuideApplication;
+  avgRating: number;
+  totalReviews: number;
+  completedTours: number;
+  cancelledTours: number;
+  isAvailable: boolean;
+  isActive: boolean;
+  responseRate: number;
+  totalRequests: number;
+  acceptedRequests: number;
+  isFeatured: boolean;
+  badges: string[];
+  lastActiveAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export const guideApi = baseApi.injectEndpoints({
@@ -103,10 +141,39 @@ export const guideApi = baseApi.injectEndpoints({
       }),
       providesTags: ["GUIDE"],
     }),
+    getMyGuideProfile: builder.query<IResponse<IGuideProfile | null>, void>({
+      query: () => ({
+        url: "/guide/my-profile",
+        method: "GET",
+      }),
+      providesTags: ["GUIDE", "USER"],
+    }),
+    toggleGuideActivation: builder.mutation<
+      IResponse<IGuideProfile>,
+      { id: string; isActive: boolean }
+    >({
+      query: ({ id, isActive }) => ({
+        url: `/guide/${id}/activation`,
+        method: "PATCH",
+        data: { isActive },
+      }),
+      invalidatesTags: ["GUIDE", "USER"],
+    }),
     getSingleApplication: builder.query<IResponse<IGuideApplication>, string>({
       query: (id) => ({
         url: `/guide/${id}`,
         method: "GET",
+      }),
+      providesTags: ["GUIDE"],
+    }),
+    getAvailableGuides: builder.query<
+      IResponse<IGuideProfile[]>,
+      { division?: string; district?: string; specialization?: string }
+    >({
+      query: (params) => ({
+        url: "/guide/available",
+        method: "GET",
+        params,
       }),
       providesTags: ["GUIDE"],
     }),
@@ -119,5 +186,8 @@ export const {
   useUpdateApplicationStatusMutation,
   useReapplyApplicationMutation,
   useGetMyApplicationQuery,
+  useGetMyGuideProfileQuery,
+  useToggleGuideActivationMutation,
   useGetSingleApplicationQuery,
+  useGetAvailableGuidesQuery,
 } = guideApi;
